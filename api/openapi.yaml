@@ -513,14 +513,6 @@ paths:
           schema:
             type: integer
             format: int64
-        - name: deleted
-          in: query
-          description: if the product is deleted
-          required: false
-          style: form
-          explode: true
-          schema:
-            type: boolean
       responses:
         "200":
           description: Successful response - returns an array of `Products` entities.

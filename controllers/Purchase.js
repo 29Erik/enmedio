@@ -1,10 +1,10 @@
 'use strict';
 
 var utils = require('../utils/writer.js');
-var Products = require('../service/ProductsService');
+var Purchase = require('../service/PurchaseService');
 
-module.exports.createProduct = function createProduct (req, res, next, productId) {
-    Products.createProduct(productId)
+module.exports.createPurchase = function createPurchase (req, res, next, purchaseId) {
+    Purchase.createPurchase(purchaseId)
         .then(function (response) {
             utils.writeJson(res, response);
         })
@@ -13,8 +13,8 @@ module.exports.createProduct = function createProduct (req, res, next, productId
         });
 };
 
-module.exports.deleteProduct = function deleteProduct (req, res, next, productId) {
-    Products.deleteProduct(productId)
+module.exports.deletePurchase = function deletePurchase (req, res, next, purchaseId) {
+    Purchase.deletePurchase(purchaseId)
         .then(function (response) {
             utils.writeJson(res, response);
         })
@@ -23,8 +23,8 @@ module.exports.deleteProduct = function deleteProduct (req, res, next, productId
         });
 };
 
-module.exports.getProduct = function getProduct (req, res, next, productId, deleted) {
-    Products.getProduct(productId, deleted)
+module.exports.getPurchase = function getPurchase (req, res, next, purchaseId) {
+    Purchase.getPurchase(purchaseId)
         .then(function (response) {
             utils.writeJson(res, response);
         })
@@ -33,8 +33,8 @@ module.exports.getProduct = function getProduct (req, res, next, productId, dele
         });
 };
 
-module.exports.getProducts = function getProducts (req, res, next, companyId, pageSize, keyPage, deleted) {
-    Products.getProducts(companyId, pageSize, keyPage, deleted)
+module.exports.getPurchases = function getPurchases (req, res, next, companyId, pageSize, keyPage) {
+    Purchase.getPurchases(companyId, pageSize, keyPage)
         .then(function (response) {
             utils.writeJson(res, response);
         })
@@ -43,8 +43,8 @@ module.exports.getProducts = function getProducts (req, res, next, companyId, pa
         });
 };
 
-module.exports.updateProduct = function updateProduct (req, res, next, body, productId) {
-    Products.updateProduct(body, productId)
+module.exports.updatePurchase = function updatePurchase (req, res, next, body, purchaseId) {
+    Purchase.updatePurchase(body, purchaseId)
         .then(function (response) {
             utils.writeJson(res, response);
         })

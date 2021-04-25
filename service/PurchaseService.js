@@ -7,7 +7,7 @@
  * productId String The `ProductId`
  * no response value expected for this operation
  **/
-exports.createProduct = function(productId) {
+exports.createPurchase = function(purchaseId) {
     return new Promise(function(resolve, reject) {
         resolve();
     });
@@ -20,7 +20,7 @@ exports.createProduct = function(productId) {
  * productId String
  * no response value expected for this operation
  **/
-exports.deleteProduct = function(productId) {
+exports.deletePurchase = function(purchaseId) {
     return new Promise(function(resolve, reject) {
         resolve();
     });
@@ -31,11 +31,10 @@ exports.deleteProduct = function(productId) {
  * Finds `Product` by Id
  * Get a single instance of a `Product`
  *
- * productId String The `product` ID
- * deleted Boolean Filter by `Product` (optional)
+ * purchaseId String The `product` ID
  * returns List
  **/
-exports.getProduct = function(productId,deleted) {
+exports.getPurchase = function(purchaseId) {
     return new Promise(function(resolve, reject) {
         var examples = {};
         examples['application/json'] = [ {
@@ -93,10 +92,9 @@ exports.getProduct = function(productId,deleted) {
  * companyId String The `Company` ID
  * pageSize Long The number of records by page
  * keyPage Long The number of the page
- * deleted Boolean if the product is deleted (optional)
  * returns List
  **/
-exports.getProducts = function(companyId,pageSize,keyPage,deleted) {
+exports.getPurchases = function(companyId,pageSize,keyPage) {
     return new Promise(function(resolve, reject) {
         var examples = {};
         examples['application/json'] = [ {
@@ -155,7 +153,7 @@ exports.getProducts = function(companyId,pageSize,keyPage,deleted) {
  * productId String The `Product` ID
  * no response value expected for this operation
  **/
-exports.updateProduct = function(body,productId) {
+exports.updatePurchase = function(body,purchaseId) {
     return new Promise(function(resolve, reject) {
         resolve();
     });
