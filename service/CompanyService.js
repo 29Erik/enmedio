@@ -1,5 +1,12 @@
 'use strict';
-
+// Dependencies
+const validate = require('validate.js');
+const _ = require('lodash');
+// Models
+const Company = require('../models/Company');
+// Utils
+const msg = require('../utils/messages').msg;
+const constrains = require('../constraints/Company');
 
 /**
  * Create an instance of the `Company`

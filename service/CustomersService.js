@@ -1,5 +1,7 @@
 'use strict';
 
+const validate = require('validate.js');
+const _ = require('lodash');
 
 /**
  * Create an instance of the `Customer`
