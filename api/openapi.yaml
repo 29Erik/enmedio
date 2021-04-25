@@ -1,0 +1,704 @@
+openapi: 3.0.1
+info:
+  title: Swagger Technical test for "Enmedio"
+  description: "This is a sample server for automatize process for x Company by his\
+    \ products, customers, and KPI."
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: inge.eromero@gmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+- url: https://enmedio.swagger.io/v1
+tags:
+- name: Company
+  description: Everything related to the creation of `Company` in the platform
+- name: Customers
+  description: The `Customers` related to the `Company`
+- name: Products
+  description: The `Products` related to the `Company`
+- name: Purchase
+  description: All `Purchase` related to a `Customer`
+paths:
+  /company:
+    get:
+      tags:
+      - Company
+      summary: Get All companies
+      description: Get a list of all companies
+      operationId: getCompanies
+      parameters:
+      - name: pageSize
+        in: query
+        description: The number of records by page
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int64
+      - name: keyPage
+        in: query
+        description: The number of the page
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int64
+      - name: deleted
+        in: query
+        description: if the company is deleted
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: boolean
+      responses:
+        "200":
+          description: Successful response - returns an array of `Company` entities.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CompanyResponse'
+                x-content-type: application/json
+      x-swagger-router-controller: Companies
+  /companies/{companyId}:
+    get:
+      tags:
+      - Company
+      summary: Finds `Company` by Id
+      description: Get a dingle instance of a `Company`
+      operationId: getCompany
+      parameters:
+      - name: companyId
+        in: path
+        description: The `Company` ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: deleted
+        in: query
+        description: Filter by `Company`
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: boolean
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CompanyResponse'
+                x-content-type: application/json
+      x-swagger-router-controller: Companies
+    put:
+      tags:
+      - Company
+      summary: Update `Company`
+      description: Update `Company`.
+      operationId: updateCompany
+      parameters:
+      - name: companyId
+        in: path
+        description: The `Company` ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Updated `Company` object
+        content:
+          '*/*':
+            schema:
+              $ref: '#/components/schemas/CompanyRequest'
+        required: true
+      responses:
+        "202":
+          description: Successful response.
+      x-swagger-router-controller: Companies
+    post:
+      tags:
+      - Company
+      summary: Create an instance of the `Company`
+      operationId: createCompany
+      parameters:
+      - name: companyId
+        in: path
+        description: The `CompanyId`
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/body'
+      responses:
+        "201":
+          description: Successful response.
+      x-swagger-router-controller: Companies
+    delete:
+      tags:
+      - Company
+      summary: Deletes a `Company`
+      operationId: deleteCompany
+      parameters:
+      - name: companyId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "201":
+          description: Successful response.
+      x-swagger-router-controller: Companies
+  /company/{companyId}/customers:
+    get:
+      tags:
+      - Customers
+      summary: Get All customers
+      description: Get a list of all customers
+      operationId: getCustomers
+      parameters:
+      - name: companyId
+        in: path
+        description: The `Customer` ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: pageSize
+        in: query
+        description: The number of records by page
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int64
+      - name: keyPage
+        in: query
+        description: The number of the page
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int64
+      - name: deleted
+        in: query
+        description: if the customer is deleted
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: boolean
+      responses:
+        "200":
+          description: Successful response - returns an array of `Customer` entities.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CustomerResponse'
+                x-content-type: application/json
+      x-swagger-router-controller: Customers
+  /customers/{customerId}:
+    get:
+      tags:
+      - Customers
+      summary: Finds `Customer` by Id
+      description: Get a dingle instance of a `Customer`
+      operationId: getCustomer
+      parameters:
+      - name: customerId
+        in: path
+        description: The `Customer` ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: deleted
+        in: query
+        description: Filter by `Customer`
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: boolean
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CustomerResponse'
+                x-content-type: application/json
+      x-swagger-router-controller: Customers
+    put:
+      tags:
+      - Customers
+      summary: Update `Customer`
+      description: Update `Customer`.
+      operationId: updateCustomer
+      parameters:
+      - name: customerId
+        in: path
+        description: The `Customer` ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Updated `Customer` object
+        content:
+          '*/*':
+            schema:
+              $ref: '#/components/schemas/CustomerRequest'
+        required: true
+      responses:
+        "202":
+          description: Successful response.
+      x-swagger-router-controller: Customers
+    post:
+      tags:
+      - Customers
+      summary: Create an instance of the `Customer`
+      operationId: createCustomer
+      parameters:
+      - name: customerId
+        in: path
+        description: The `CustoemrId`
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/body_1'
+      responses:
+        "201":
+          description: Successful response.
+      x-swagger-router-controller: Customers
+    delete:
+      tags:
+      - Customers
+      summary: Deletes a `Customer`
+      operationId: deleteCustomer
+      parameters:
+      - name: customerId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "201":
+          description: Successful response.
+      x-swagger-router-controller: Customers
+  /company/{companyId}/products:
+    get:
+      tags:
+      - Products
+      summary: Get All products
+      description: Get a list of all `Products`
+      operationId: getProducts
+      parameters:
+      - name: companyId
+        in: path
+        description: The `Company` ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: pageSize
+        in: query
+        description: The number of records by page
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int64
+      - name: keyPage
+        in: query
+        description: The number of the page
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
+          format: int64
+      - name: deleted
+        in: query
+        description: if the product is deleted
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: boolean
+      responses:
+        "200":
+          description: Successful response - returns an array of `Products` entities.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductResponse'
+                x-content-type: application/json
+      x-swagger-router-controller: Products
+  /products/{productId}:
+    get:
+      tags:
+      - Products
+      summary: Finds `Product` by Id
+      description: Get a single instance of a `Product`
+      operationId: getProduct
+      parameters:
+      - name: productId
+        in: path
+        description: The `product` ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: deleted
+        in: query
+        description: Filter by `Product`
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: boolean
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductResponse'
+                x-content-type: application/json
+      x-swagger-router-controller: Products
+    put:
+      tags:
+      - Products
+      summary: Update `Product`
+      description: Update `Product`.
+      operationId: updateProduct
+      parameters:
+      - name: productId
+        in: path
+        description: The `Product` ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Updated `Product` object
+        content:
+          '*/*':
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+        required: true
+      responses:
+        "202":
+          description: Successful response.
+      x-swagger-router-controller: Products
+    post:
+      tags:
+      - Products
+      summary: Create an instance of the `Product`
+      operationId: createProduct
+      parameters:
+      - name: productId
+        in: path
+        description: The `ProductId`
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/body_2'
+      responses:
+        "201":
+          description: Successful response.
+      x-swagger-router-controller: Products
+    delete:
+      tags:
+      - Products
+      summary: Deletes a `Product`
+      operationId: deleteProduct
+      parameters:
+      - name: productId
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "201":
+          description: Successful response.
+      x-swagger-router-controller: Customers
+components:
+  schemas:
+    CompanyResponse:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Autogenerated `Mongo` ID
+        name:
+          type: string
+          description: Name for the `Company`
+        email:
+          type: string
+          description: Email for the `Company`
+        cretedOn:
+          type: integer
+          description: Date of creation of the `Company`
+          format: int64
+        deleted:
+          type: boolean
+          description: If the `Company` is in a deleted state
+      example:
+        _id: 5efe6bf2bbf35da0d039a6b8
+        name: XYZ
+        email: xyz@gmail.com
+        createdOn: 1593732082206
+        deleted: false
+    CompanyRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name for the `Company`
+        email:
+          type: string
+          description: int32
+        deleted:
+          type: boolean
+          description: If the `Company` is in a deleted state
+      example:
+        name: XYZ
+        email: xyz@gmail.com
+        deleted: false
+    CustomerResponse:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Autogenerated `Mongo` ID
+        companyId:
+          type: string
+          description: The `Company` related
+        name:
+          type: string
+          description: Name for the `Customer`
+        description:
+          type: string
+          description: Description for the `Customer`
+        email:
+          type: string
+          description: Email for the `Company`
+        cretedOn:
+          type: integer
+          description: Date of creation of the `Customer`
+          format: int64
+      example:
+        _id: 5efe6bf2bbf35da0d039a6b8
+        companyId: 5efe6bf2bbf35da0d039a6b8
+        name: Erikson
+        description: my customer
+        email: inge.eromero@gmail.com
+        createdOn: 1593732082206
+    CustomerRequest:
+      type: object
+      properties:
+        companyId:
+          type: string
+          description: The `Company` related
+        name:
+          type: string
+          description: Name for the `Customer`
+        description:
+          type: string
+          description: Description for the `Customer`
+        email:
+          type: string
+          description: Email for the `Company`
+      example:
+        companyId: 5efe6bf2bbf35da0d039a6b8
+        name: Erikson
+        description: my customer
+        email: inge.eromero@gmail.com
+    ProductResponse:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Autogenerated `Mongo` ID
+        companyId:
+          type: string
+          description: The `Company` related
+        name:
+          type: string
+          description: Name for the `Product`
+        description:
+          type: string
+          description: Description for the `Product`
+        score:
+          type: array
+          description: Scores by `Customers`
+          items:
+            $ref: '#/components/schemas/ProductResponse_score'
+        price:
+          type: integer
+          description: Price of the `Product`
+          format: int64
+        createdOn:
+          type: integer
+          description: Date of creation for the `Product`
+          format: int64
+        stock:
+          type: integer
+          description: Quantity for the `Product`
+          format: int64
+        deleted:
+          type: boolean
+          description: If the `Product` is on deleted state
+      example:
+        _id: 5efe6bf2bbf35da0d039a6b8
+        companyId: 5efe6bf2bbf35da0d039a6b8
+        name: Patilla
+        description: Fruta jugosa
+        score:
+        - customerId: 5efe6bf2bbf35da0d039a6b8
+          score: 5
+        - customerId: 5efe6bf2bbf35da0d039a6b8
+          score: 4
+        - customerId: 5efe6bf2bbf35da0d039a6b8
+          score: 3
+        price: 123486
+        createdOn: 1593732082206
+        stock: 48
+        deleted: false
+    ProductRequest:
+      type: object
+      properties:
+        companyId:
+          type: string
+          description: The `Company` related
+        name:
+          type: string
+          description: Name for the `Product`
+        description:
+          type: string
+          description: Description for the `Product`
+        price:
+          type: integer
+          description: Price for the `Product`
+          format: int64
+        stock:
+          type: integer
+          description: Quantity for the `Product`
+          format: int64
+      example:
+        companyId: 5efe6bf2bbf35da0d039a6b8
+        name: Patilla
+        description: Fruta jugosa
+        price: 12348
+        stock: 48
+    body:
+      properties:
+        name:
+          type: string
+          description: Name of the `Company`
+        email:
+          type: string
+          description: Email of the `Company`
+        deleted:
+          type: boolean
+          description: If the `Company` is in deleted state
+    body_1:
+      properties:
+        companyId:
+          type: string
+          description: Id of the `Company`
+        name:
+          type: string
+          description: Name of the `Customer`
+        email:
+          type: string
+          description: Email of the `Customer`
+        description:
+          type: boolean
+          description: Description of the `Customer`
+    body_2:
+      properties:
+        companyId:
+          type: string
+          description: Id of the `Company`
+        name:
+          type: string
+          description: Name of the `Product`
+        description:
+          type: string
+          description: Description of the `Product`
+        price:
+          type: integer
+          description: Price of the `Product`
+          format: int64
+        stock:
+          type: integer
+          description: Stock of the `Product`
+          format: int64
+    ProductResponse_score:
+      type: object
+      properties:
+        customerId:
+          type: string
+          description: The `Customer` who gave the qualification
+        score:
+          type: integer
+          description: Score for the qualit of the `Product`
+          format: int64
