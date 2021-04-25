@@ -6,17 +6,21 @@ const _ = require('lodash');
 const Company = require('../models/Company');
 // Utils
 const msg = require('../utils/messages').msg;
-const constrains = require('../constraints/Company');
+const constraints = require('../constraints/Company');
 
 /**
  * Create an instance of the `Company`
  *
- * companyId String The `CompanyId`
+ * body to crete The `Company`
  * no response value expected for this operation
  **/
-exports.createCompany = function(companyId) {
+exports.createCompany = function(body) {
   return new Promise(function(resolve, reject) {
-    resolve();
+    validate.async(body, constraints.createCompany, {format: "flat"})
+        .then(() => {
+
+        })
+        .catch(error => reject(msg.format(error[0])));
   });
 }
 
@@ -29,7 +33,13 @@ exports.createCompany = function(companyId) {
  **/
 exports.deleteCompany = function(companyId) {
   return new Promise(function(resolve, reject) {
-    resolve();
+    validate.async({
+        companyId: companyId
+    }, constraints.deleteCompany, {format: "flat"})
+        .then(() => {
+
+        })
+        .catch(error => reject(msg.format(error[0])));
   });
 }
 
@@ -40,30 +50,24 @@ exports.deleteCompany = function(companyId) {
  *
  * pageSize Long The number of records by page
  * keyPage Long The number of the page
+ * name String of the `Company`
+ * email String of the `Company`
  * deleted Boolean if the company is deleted (optional)
  * returns List
  **/
-exports.getCompanies = function(pageSize,keyPage,deleted) {
+exports.getCompanies = function(pageSize, keyPage, name, email, deleted) {
   return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = [ {
-  "_id" : "5efe6bf2bbf35da0d039a6b8",
-  "name" : "XYZ",
-  "email" : "xyz@gmail.com",
-  "createdOn" : 1593732082206,
-  "deleted" : false
-}, {
-  "_id" : "5efe6bf2bbf35da0d039a6b8",
-  "name" : "XYZ",
-  "email" : "xyz@gmail.com",
-  "createdOn" : 1593732082206,
-  "deleted" : false
-} ];
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
+    validate.async({
+        pageSize: pageSize,
+        keyPage: keyPage,
+        name: name,
+        email: email,
+        deleted: deleted
+    }, constraints.getCompanies, {format: "flat"})
+        .then(() => {
+
+        })
+        .catch(error => reject(msg.format(error[0])));
   });
 }
 
@@ -73,30 +77,17 @@ exports.getCompanies = function(pageSize,keyPage,deleted) {
  * Get a dingle instance of a `Company`
  *
  * companyId String The `Company` ID
- * deleted Boolean Filter by `Company` (optional)
  * returns List
  **/
-exports.getCompany = function(companyId,deleted) {
+exports.getCompany = function(companyId) {
   return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = [ {
-  "_id" : "5efe6bf2bbf35da0d039a6b8",
-  "name" : "XYZ",
-  "email" : "xyz@gmail.com",
-  "createdOn" : 1593732082206,
-  "deleted" : false
-}, {
-  "_id" : "5efe6bf2bbf35da0d039a6b8",
-  "name" : "XYZ",
-  "email" : "xyz@gmail.com",
-  "createdOn" : 1593732082206,
-  "deleted" : false
-} ];
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
+    validate.async({
+        companyId: companyId
+    }, constraints.getCompany, {format: "flat"})
+        .then(() => {
+
+        })
+        .catch(error => reject(msg.format(error[0])));
   });
 }
 
@@ -110,8 +101,13 @@ exports.getCompany = function(companyId,deleted) {
  * no response value expected for this operation
  **/
 exports.updateCompany = function(body,companyId) {
+    body.companyId = companyId;
   return new Promise(function(resolve, reject) {
-    resolve();
+    validate.async(body, constraints.createCompany, {format: "flat"})
+        .then(() => {
+
+        })
+        .catch(error => reject(msg.format(error[0])));
   });
 }
 

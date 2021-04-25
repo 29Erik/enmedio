@@ -1,17 +1,28 @@
 'use strict';
-
+// Dependencies
 const validate = require('validate.js');
 const _ = require('lodash');
+// Models
+const Customer = require('../models/Customers');
+// Utils
+const msg = require('../utils/messages').msg;
+const constraints = require('../constraints/Customer');
 
 /**
  * Create an instance of the `Customer`
  *
- * customerId String The `CustoemrId`
+ * companyId String The `CompanyId`
+ * body body to The `Customer`
  * no response value expected for this operation
  **/
-exports.createCustomer = function(customerId) {
+exports.createCustomer = function(companyId, body) {
+    body.companyId = companyId;
   return new Promise(function(resolve, reject) {
-    resolve();
+    validate.async(body, constraints.createCustomer, {format: "flat"})
+        .then(() => {
+
+        })
+        .catch(error => reject(msg.format(error[0])));
   });
 }
 
@@ -24,7 +35,13 @@ exports.createCustomer = function(customerId) {
  **/
 exports.deleteCustomer = function(customerId) {
   return new Promise(function(resolve, reject) {
-    resolve();
+    validate.async({
+        customerId: customerId
+    }, constraints.deleteCustomer(), {format: "flat"})
+        .then(() => {
+
+        })
+        .catch(error => reject(msg.format(error[0])));
   });
 }
 
@@ -34,32 +51,17 @@ exports.deleteCustomer = function(customerId) {
  * Get a dingle instance of a `Customer`
  *
  * customerId String The `Customer` ID
- * deleted Boolean Filter by `Customer` (optional)
  * returns List
  **/
-exports.getCustomer = function(customerId,deleted) {
+exports.getCustomer = function(customerId) {
   return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = [ {
-  "_id" : "5efe6bf2bbf35da0d039a6b8",
-  "companyId" : "5efe6bf2bbf35da0d039a6b8",
-  "name" : "Erikson",
-  "description" : "my customer",
-  "email" : "inge.eromero@gmail.com",
-  "createdOn" : 1593732082206
-}, {
-  "_id" : "5efe6bf2bbf35da0d039a6b8",
-  "companyId" : "5efe6bf2bbf35da0d039a6b8",
-  "name" : "Erikson",
-  "description" : "my customer",
-  "email" : "inge.eromero@gmail.com",
-  "createdOn" : 1593732082206
-} ];
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
+    validate.async({
+        customerId: customerId
+    }, constraints.getCustomer, {format: "flat"})
+        .then(() => {
+
+        })
+        .catch(error => reject(msg.format(error[0])));
   });
 }
 
@@ -71,32 +73,25 @@ exports.getCustomer = function(customerId,deleted) {
  * companyId String The `Customer` ID
  * pageSize Long The number of records by page
  * keyPage Long The number of the page
+ * name String the customer name (optional)
+ * email String the customer email (optional)
  * deleted Boolean if the customer is deleted (optional)
  * returns List
  **/
-exports.getCustomers = function(companyId,pageSize,keyPage,deleted) {
+exports.getCustomers = function(companyId, pageSize, keyPage, name, email, deleted) {
   return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = [ {
-  "_id" : "5efe6bf2bbf35da0d039a6b8",
-  "companyId" : "5efe6bf2bbf35da0d039a6b8",
-  "name" : "Erikson",
-  "description" : "my customer",
-  "email" : "inge.eromero@gmail.com",
-  "createdOn" : 1593732082206
-}, {
-  "_id" : "5efe6bf2bbf35da0d039a6b8",
-  "companyId" : "5efe6bf2bbf35da0d039a6b8",
-  "name" : "Erikson",
-  "description" : "my customer",
-  "email" : "inge.eromero@gmail.com",
-  "createdOn" : 1593732082206
-} ];
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
+    validate.async({
+        companyId: companyId,
+        pageSize: pageSize,
+        keyPage: keyPage,
+        name: name,
+        email: email,
+        deleted: deleted
+    }, constraints.getCustomers, {format: "flat"})
+        .then(() => {
+
+        })
+        .catch(error => reject(msg.format(error[0])));
   });
 }
 
@@ -110,8 +105,13 @@ exports.getCustomers = function(companyId,pageSize,keyPage,deleted) {
  * no response value expected for this operation
  **/
 exports.updateCustomer = function(body,customerId) {
+    body.customerId = customerId;
   return new Promise(function(resolve, reject) {
-    resolve();
+    validate.async(body, constraints.createCustomer, {format: "flat"})
+        .then(() => {
+
+        })
+        .catch(error => reject(msg.format(error[0])));
   });
 }
 

@@ -1,17 +1,28 @@
 'use strict';
-
+// Dependencies
 const validate = require('validate.js');
 const _ = require('lodash');
+// Models
+const Product = require('../models/Product');
+// Utils
+const msg = require('../utils/messages').msg;
+const constraints = require('../constraints/Product');
 
 /**
  * Create an instance of the `Product`
  *
- * productId String The `ProductId`
+ * companyId String create The `CompanyId`
+ * body create The `Product`
  * no response value expected for this operation
  **/
-exports.createProduct = function(productId) {
+exports.createProduct = function(companyId, body) {
+    body.companyId = companyId;
   return new Promise(function(resolve, reject) {
-    resolve();
+    validate.async(body, constraints.createProduct, {format: "flat"})
+        .then(() => {
+
+        })
+        .catch(error => reject(msg.format(error[0])));
   });
 }
 
@@ -24,7 +35,13 @@ exports.createProduct = function(productId) {
  **/
 exports.deleteProduct = function(productId) {
   return new Promise(function(resolve, reject) {
-    resolve();
+    validate.async({
+        productId: productId
+    }, constraints.deleteProduct, {format: "flat"})
+        .then(() => {
+
+        })
+        .catch(error => reject(msg.format(error[0])));
   });
 }
 
@@ -37,53 +54,15 @@ exports.deleteProduct = function(productId) {
  * deleted Boolean Filter by `Product` (optional)
  * returns List
  **/
-exports.getProduct = function(productId,deleted) {
+exports.getProduct = function(productId) {
   return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = [ {
-  "_id" : "5efe6bf2bbf35da0d039a6b8",
-  "companyId" : "5efe6bf2bbf35da0d039a6b8",
-  "name" : "Patilla",
-  "description" : "Fruta jugosa",
-  "score" : [ {
-    "customerId" : "5efe6bf2bbf35da0d039a6b8",
-    "score" : 5
-  }, {
-    "customerId" : "5efe6bf2bbf35da0d039a6b8",
-    "score" : 4
-  }, {
-    "customerId" : "5efe6bf2bbf35da0d039a6b8",
-    "score" : 3
-  } ],
-  "price" : 123486,
-  "createdOn" : 1593732082206,
-  "stock" : 48,
-  "deleted" : false
-}, {
-  "_id" : "5efe6bf2bbf35da0d039a6b8",
-  "companyId" : "5efe6bf2bbf35da0d039a6b8",
-  "name" : "Patilla",
-  "description" : "Fruta jugosa",
-  "score" : [ {
-    "customerId" : "5efe6bf2bbf35da0d039a6b8",
-    "score" : 5
-  }, {
-    "customerId" : "5efe6bf2bbf35da0d039a6b8",
-    "score" : 4
-  }, {
-    "customerId" : "5efe6bf2bbf35da0d039a6b8",
-    "score" : 3
-  } ],
-  "price" : 123486,
-  "createdOn" : 1593732082206,
-  "stock" : 48,
-  "deleted" : false
-} ];
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
+    validate.async({
+        productId: productId
+    }, constraints.getProduct, {format: "flat"})
+        .then(() => {
+
+        })
+        .catch(error => reject(msg.format(error[0])));
   });
 }
 
@@ -95,56 +74,27 @@ exports.getProduct = function(productId,deleted) {
  * companyId String The `Company` ID
  * pageSize Long The number of records by page
  * keyPage Long The number of the page
+ * name String the product name (optional)
+ * price Integer the product price (optional)
+ * stock Integer the product stock (optional)
  * deleted Boolean if the product is deleted (optional)
  * returns List
  **/
-exports.getProducts = function(companyId,pageSize,keyPage,deleted) {
+exports.getProducts = function(companyId, pageSize, keyPage, name, price, stock, deleted) {
   return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = [ {
-  "_id" : "5efe6bf2bbf35da0d039a6b8",
-  "companyId" : "5efe6bf2bbf35da0d039a6b8",
-  "name" : "Patilla",
-  "description" : "Fruta jugosa",
-  "score" : [ {
-    "customerId" : "5efe6bf2bbf35da0d039a6b8",
-    "score" : 5
-  }, {
-    "customerId" : "5efe6bf2bbf35da0d039a6b8",
-    "score" : 4
-  }, {
-    "customerId" : "5efe6bf2bbf35da0d039a6b8",
-    "score" : 3
-  } ],
-  "price" : 123486,
-  "createdOn" : 1593732082206,
-  "stock" : 48,
-  "deleted" : false
-}, {
-  "_id" : "5efe6bf2bbf35da0d039a6b8",
-  "companyId" : "5efe6bf2bbf35da0d039a6b8",
-  "name" : "Patilla",
-  "description" : "Fruta jugosa",
-  "score" : [ {
-    "customerId" : "5efe6bf2bbf35da0d039a6b8",
-    "score" : 5
-  }, {
-    "customerId" : "5efe6bf2bbf35da0d039a6b8",
-    "score" : 4
-  }, {
-    "customerId" : "5efe6bf2bbf35da0d039a6b8",
-    "score" : 3
-  } ],
-  "price" : 123486,
-  "createdOn" : 1593732082206,
-  "stock" : 48,
-  "deleted" : false
-} ];
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
+    validate.async({
+        companyId: companyId,
+        pageSize: pageSize,
+        keyPage: keyPage,
+        name: name,
+        price: price,
+        stock: stock,
+        deleted: deleted
+    }, constraints.getProducts, {format: "flat"})
+        .then(() => {
+
+        })
+        .catch(error => reject(msg.format(error[0])));
   });
 }
 
@@ -158,8 +108,13 @@ exports.getProducts = function(companyId,pageSize,keyPage,deleted) {
  * no response value expected for this operation
  **/
 exports.updateProduct = function(body,productId) {
+    body.productId = productId;
   return new Promise(function(resolve, reject) {
-    resolve();
+    validate.async(body, constraints.updateProduct, {format: "flat"})
+        .then(() => {
+
+        })
+        .catch(error => reject(msg.format(error[0])));
   });
 }
 

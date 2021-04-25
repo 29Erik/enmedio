@@ -1,36 +1,53 @@
 'use strict';
-
+// Dependencies
 const validate = require('validate.js');
 const _ = require('lodash');
+// Models
+const Purchase = require('../models/Purchase');
+// Utils
+const msg = require('../utils/messages').msg;
+const constraints = require('../constraints/Purchase');
 
 /**
  * Create an instance of the `Product`
  *
- * productId String The `ProductId`
+ * customerId String The `CustomerId`
+ * body to create The `Purchase`
  * no response value expected for this operation
  **/
-exports.createPurchase = function(purchaseId) {
+exports.createPurchase = function(customerId, body) {
+    body.customerId = customerId;
     return new Promise(function(resolve, reject) {
-        resolve();
+        validate.async(body, constraints.createPurchase, {format: "flat"})
+            .then(() => {
+
+            })
+            .catch(error => reject(msg.format(error[0])));
     });
 }
 
 
 /**
- * Deletes a `Product`
+ * Deletes a `Purchase`
  *
- * productId String
+ * purchaseId String
  * no response value expected for this operation
  **/
 exports.deletePurchase = function(purchaseId) {
     return new Promise(function(resolve, reject) {
-        resolve();
+        validate.async({
+            purchaseId: purchaseId
+        }, constraints.deletePurchase, {format: "flat"})
+            .then(() => {
+
+            })
+            .catch(error => reject(msg.format(error[0])));
     });
 }
 
 
 /**
- * Finds `Product` by Id
+ * Finds `Purchase` by Id
  * Get a single instance of a `Product`
  *
  * purchaseId String The `product` ID
@@ -38,126 +55,59 @@ exports.deletePurchase = function(purchaseId) {
  **/
 exports.getPurchase = function(purchaseId) {
     return new Promise(function(resolve, reject) {
-        var examples = {};
-        examples['application/json'] = [ {
-            "_id" : "5efe6bf2bbf35da0d039a6b8",
-            "companyId" : "5efe6bf2bbf35da0d039a6b8",
-            "name" : "Patilla",
-            "description" : "Fruta jugosa",
-            "score" : [ {
-                "customerId" : "5efe6bf2bbf35da0d039a6b8",
-                "score" : 5
-            }, {
-                "customerId" : "5efe6bf2bbf35da0d039a6b8",
-                "score" : 4
-            }, {
-                "customerId" : "5efe6bf2bbf35da0d039a6b8",
-                "score" : 3
-            } ],
-            "price" : 123486,
-            "createdOn" : 1593732082206,
-            "stock" : 48,
-            "deleted" : false
-        }, {
-            "_id" : "5efe6bf2bbf35da0d039a6b8",
-            "companyId" : "5efe6bf2bbf35da0d039a6b8",
-            "name" : "Patilla",
-            "description" : "Fruta jugosa",
-            "score" : [ {
-                "customerId" : "5efe6bf2bbf35da0d039a6b8",
-                "score" : 5
-            }, {
-                "customerId" : "5efe6bf2bbf35da0d039a6b8",
-                "score" : 4
-            }, {
-                "customerId" : "5efe6bf2bbf35da0d039a6b8",
-                "score" : 3
-            } ],
-            "price" : 123486,
-            "createdOn" : 1593732082206,
-            "stock" : 48,
-            "deleted" : false
-        } ];
-        if (Object.keys(examples).length > 0) {
-            resolve(examples[Object.keys(examples)[0]]);
-        } else {
-            resolve();
-        }
+        validate.async({
+            purchaseId: purchaseId
+        }, constraints.getPurchase, {format: "flat"})
+            .then(() => {
+
+            })
+            .catch(error => reject(msg.format(error[0])));
     });
 }
 
 
 /**
- * Get All products
+ * Get All purchases
  * Get a list of all `Products`
  *
  * companyId String The `Company` ID
  * pageSize Long The number of records by page
  * keyPage Long The number of the page
+ * date Integer The timestamp of the purchase
  * returns List
  **/
-exports.getPurchases = function(companyId,pageSize,keyPage) {
+exports.getPurchases = function(companyId,pageSize,keyPage, date) {
     return new Promise(function(resolve, reject) {
-        var examples = {};
-        examples['application/json'] = [ {
-            "_id" : "5efe6bf2bbf35da0d039a6b8",
-            "companyId" : "5efe6bf2bbf35da0d039a6b8",
-            "name" : "Patilla",
-            "description" : "Fruta jugosa",
-            "score" : [ {
-                "customerId" : "5efe6bf2bbf35da0d039a6b8",
-                "score" : 5
-            }, {
-                "customerId" : "5efe6bf2bbf35da0d039a6b8",
-                "score" : 4
-            }, {
-                "customerId" : "5efe6bf2bbf35da0d039a6b8",
-                "score" : 3
-            } ],
-            "price" : 123486,
-            "createdOn" : 1593732082206,
-            "stock" : 48,
-            "deleted" : false
-        }, {
-            "_id" : "5efe6bf2bbf35da0d039a6b8",
-            "companyId" : "5efe6bf2bbf35da0d039a6b8",
-            "name" : "Patilla",
-            "description" : "Fruta jugosa",
-            "score" : [ {
-                "customerId" : "5efe6bf2bbf35da0d039a6b8",
-                "score" : 5
-            }, {
-                "customerId" : "5efe6bf2bbf35da0d039a6b8",
-                "score" : 4
-            }, {
-                "customerId" : "5efe6bf2bbf35da0d039a6b8",
-                "score" : 3
-            } ],
-            "price" : 123486,
-            "createdOn" : 1593732082206,
-            "stock" : 48,
-            "deleted" : false
-        } ];
-        if (Object.keys(examples).length > 0) {
-            resolve(examples[Object.keys(examples)[0]]);
-        } else {
-            resolve();
-        }
+        validate.async({
+            companyId: companyId,
+            pageSize: pageSize,
+            keyPage: keyPage,
+            date: date
+        }, constraints.getPurchases, {format: "flat"})
+            .then(() => {
+
+            })
+            .catch(error => reject(msg.format(error[0])));
     });
 }
 
 
 /**
- * Update `Product`
- * Update `Product`.
+ * Update `Purchase`
+ * Update `Purchase`.
  *
  * body ProductRequest Updated `Product` object
- * productId String The `Product` ID
+ * purchaseId String The `Purchase` ID
  * no response value expected for this operation
  **/
 exports.updatePurchase = function(body,purchaseId) {
+    body.purchaseId = purchaseId;
     return new Promise(function(resolve, reject) {
-        resolve();
+        validate.async(body, constraints.updatePurchase, {format: "flat"})
+            .then(() => {
+
+            })
+            .catch(error => reject(msg.format(error[0])));
     });
 }
 
