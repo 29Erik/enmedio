@@ -1,5 +1,6 @@
-exports.createProduct = {
+exports.createCustomer = {
     "companyId": {
+        presence: true,
         length: {
             is: 24
         },
@@ -10,24 +11,17 @@ exports.createProduct = {
         type: "string"
     },
     "description": {
-        presence: true,
         type: "string"
     },
-    "disabled": {
+    "email": {
         presence: true,
-        type: "boolean"
-    },
-    "service": {
-        presence: true,
-        type: "boolean"
+        email: true
     }
 };
 
-exports.deleteProduct = {
-    "productId": {
-        presence: {
-            allowEmpty: false
-        },
+exports.deleteCustomer = {
+    "customerId": {
+        presence: true,
         length: {
             is: 24
         },
@@ -35,31 +29,32 @@ exports.deleteProduct = {
     }
 };
 
-exports.getProduct = {
-    "productId": {
-        presence: {
-            allowEmpty: false
-        },
-        length: {
-            is: 24
-        },
-        type: "string"
-    }
-};
-
-exports.getProducts = {
-    "query.companyId": {
+exports.getCustomer = {
+    "customerId": {
         presence: true,
         length: {
             is: 24
         },
         type: "string"
     },
-    "query.service": {
-        type: "boolean"
+    "query.name": {
+        type: "string"
     },
-    "query.disabled": {
+    "query.email": {
+        email: true
+    },
+    "query.deleted": {
         type: "boolean"
+    }
+};
+
+exports.getCustomers = {
+    "companyId": {
+        presence: true,
+        length: {
+            is: 24
+        },
+        type: "string"
     },
     "pageSize": {
         presence: true,
@@ -74,17 +69,15 @@ exports.getProducts = {
             onlyInteger: true,
             greaterThan: 0,
         }
+    },
+    "deleted": {
+        type: 'boolean'
     }
 };
 
-exports.updateProduct = {
-    "productId": {
-        length: {
-            is: 24
-        },
-        type: "string"
-    },
-    "companyId": {
+exports.updateCustomer = {
+    "customerId": {
+        presence: true,
         length: {
             is: 24
         },
@@ -96,10 +89,7 @@ exports.updateProduct = {
     "description": {
         type: "string"
     },
-    "disabled": {
-        type: "boolean"
-    },
-    "service": {
-        type: "boolean"
+    "email": {
+        email: true
     }
 };

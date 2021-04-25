@@ -1,5 +1,6 @@
 exports.createProduct = {
     "companyId": {
+        presence: true,
         length: {
             is: 24
         },
@@ -10,24 +11,21 @@ exports.createProduct = {
         type: "string"
     },
     "description": {
-        presence: true,
         type: "string"
     },
-    "disabled": {
+    "price": {
         presence: true,
-        type: "boolean"
+        type: "integer"
     },
-    "service": {
+    "stock": {
         presence: true,
-        type: "boolean"
+        type: "integer"
     }
 };
 
 exports.deleteProduct = {
     "productId": {
-        presence: {
-            allowEmpty: false
-        },
+        presence: true,
         length: {
             is: 24
         },
@@ -37,29 +35,33 @@ exports.deleteProduct = {
 
 exports.getProduct = {
     "productId": {
-        presence: {
-            allowEmpty: false
-        },
-        length: {
-            is: 24
-        },
-        type: "string"
-    }
-};
-
-exports.getProducts = {
-    "query.companyId": {
         presence: true,
         length: {
             is: 24
         },
         type: "string"
     },
-    "query.service": {
-        type: "boolean"
+    "query.name": {
+        type: "string"
     },
-    "query.disabled": {
+    "query.price": {
+        type: "integer"
+    },
+    "query.stock": {
+        type: "integer"
+    },
+    "query.deleted": {
         type: "boolean"
+    }
+};
+
+exports.getProducts = {
+    "companyId": {
+        presence: true,
+        length: {
+            is: 24
+        },
+        type: "string"
     },
     "pageSize": {
         presence: true,
@@ -74,17 +76,15 @@ exports.getProducts = {
             onlyInteger: true,
             greaterThan: 0,
         }
+    },
+    "deleted": {
+        type: "boolean"
     }
 };
 
 exports.updateProduct = {
     "productId": {
-        length: {
-            is: 24
-        },
-        type: "string"
-    },
-    "companyId": {
+        presence: true,
         length: {
             is: 24
         },
@@ -96,10 +96,10 @@ exports.updateProduct = {
     "description": {
         type: "string"
     },
-    "disabled": {
-        type: "boolean"
+    "price": {
+        type: "integer"
     },
-    "service": {
-        type: "boolean"
+    "stock": {
+        type: "integer"
     }
 };

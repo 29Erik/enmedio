@@ -70,6 +70,20 @@ paths:
                   $ref: '#/components/schemas/CompanyResponse'
                 x-content-type: application/json
       x-swagger-router-controller: Companies
+    post:
+      tags:
+        - Company
+      summary: Create an instance of the `Company`
+      operationId: createCompany
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CompanyRequest'
+      responses:
+        "201":
+          description: Successful response.
+      x-swagger-router-controller: Companies
   /companies/{companyId}:
     get:
       tags:
@@ -84,6 +98,22 @@ paths:
         required: true
         style: simple
         explode: false
+        schema:
+          type: string
+      - name: name
+        in: query
+        description: Filter by `Company`
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: email
+        in: query
+        description: Filter by `Company`
+        required: false
+        style: form
+        explode: true
         schema:
           type: string
       - name: deleted
@@ -129,29 +159,6 @@ paths:
         required: true
       responses:
         "202":
-          description: Successful response.
-      x-swagger-router-controller: Companies
-    post:
-      tags:
-      - Company
-      summary: Create an instance of the `Company`
-      operationId: createCompany
-      parameters:
-      - name: companyId
-        in: path
-        description: The `CompanyId`
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-      requestBody:
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/CompanyRequest'
-      responses:
-        "201":
           description: Successful response.
       x-swagger-router-controller: Companies
     delete:
@@ -224,6 +231,29 @@ paths:
                   $ref: '#/components/schemas/CustomerResponse'
                 x-content-type: application/json
       x-swagger-router-controller: Customers
+    post:
+      tags:
+        - Customers
+      summary: Create an instance of the `Customer`
+      operationId: createCustomer
+      parameters:
+        - name: companyId
+          in: path
+          description: The `Company` Id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CustomerRequest'
+      responses:
+        "201":
+          description: Successful response.
+      x-swagger-router-controller: Customers
   /customers/{customerId}:
     get:
       tags:
@@ -238,6 +268,22 @@ paths:
         required: true
         style: simple
         explode: false
+        schema:
+          type: string
+      - name: name
+        in: query
+        description: Filter by `Customer`
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: email
+        in: query
+        description: Filter by `Customer`
+        required: false
+        style: form
+        explode: true
         schema:
           type: string
       - name: deleted
@@ -283,29 +329,6 @@ paths:
         required: true
       responses:
         "202":
-          description: Successful response.
-      x-swagger-router-controller: Customers
-    post:
-      tags:
-      - Customers
-      summary: Create an instance of the `Customer`
-      operationId: createCustomer
-      parameters:
-      - name: customerId
-        in: path
-        description: The `CustoemrId`
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-      requestBody:
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/CustomerRequest'
-      responses:
-        "201":
           description: Successful response.
       x-swagger-router-controller: Customers
     delete:
@@ -378,6 +401,29 @@ paths:
                   $ref: '#/components/schemas/ProductResponse'
                 x-content-type: application/json
       x-swagger-router-controller: Products
+    post:
+      tags:
+        - Products
+      summary: Create an instance of the `Product`
+      operationId: createProduct
+      parameters:
+        - name: companyId
+          in: path
+          description: The `Company` Id
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+      responses:
+        "201":
+          description: Successful response.
+      x-swagger-router-controller: Products
   /products/{productId}:
     get:
       tags:
@@ -394,6 +440,30 @@ paths:
         explode: false
         schema:
           type: string
+      - name: name
+        in: query
+        description: Filter by `Product`
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: price
+        in: query
+        description: Filter by `Product`
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+      - name: stock
+        in: query
+        description: Filter by `Product`
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
       - name: deleted
         in: query
         description: Filter by `Product`
@@ -437,29 +507,6 @@ paths:
         required: true
       responses:
         "202":
-          description: Successful response.
-      x-swagger-router-controller: Products
-    post:
-      tags:
-      - Products
-      summary: Create an instance of the `Product`
-      operationId: createProduct
-      parameters:
-      - name: productId
-        in: path
-        description: The `ProductId`
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-      requestBody:
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/ProductRequest'
-      responses:
-        "201":
           description: Successful response.
       x-swagger-router-controller: Products
     delete:
@@ -524,6 +571,29 @@ paths:
                   $ref: '#/components/schemas/ProductResponse'
                 x-content-type: application/json
       x-swagger-router-controller: Purchase
+    post:
+      tags:
+        - Purchase
+      summary: Create an instance of the `Purchase`
+      operationId: createPurchase
+      parameters:
+        - name: customerId
+          in: path
+          description: The `Customer` ID
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PurchaseRequest'
+      responses:
+        "201":
+          description: Successful response.
+      x-swagger-router-controller: Purchase
   /purchase/{purchaseId}:
     get:
       tags:
@@ -540,6 +610,13 @@ paths:
           explode: false
           schema:
             type: string
+        - name: date
+          in: query
+          description: The Date of `Purchase`
+          style: simple
+          explode: false
+          schema:
+            type: integer
       responses:
         "200":
           description: successful operation
@@ -575,29 +652,6 @@ paths:
         required: true
       responses:
         "202":
-          description: Successful response.
-      x-swagger-router-controller: Purchase
-    post:
-      tags:
-        - Purchase
-      summary: Create an instance of the `Purchase`
-      operationId: createPurchase
-      parameters:
-        - name: purchaseId
-          in: path
-          description: The `PurchaseId`
-          required: true
-          style: simple
-          explode: false
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/PurchaseRequest'
-      responses:
-        "201":
           description: Successful response.
       x-swagger-router-controller: Purchase
     delete:
@@ -653,13 +707,9 @@ components:
         email:
           type: string
           description: int32
-        deleted:
-          type: boolean
-          description: If the `Company` is in a deleted state
       example:
         name: XYZ
         email: xyz@gmail.com
-        deleted: false
     CustomerResponse:
       type: object
       properties:

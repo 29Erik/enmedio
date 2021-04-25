@@ -1,65 +1,55 @@
-exports.createProduct = {
-    "companyId": {
+exports.createPurchase = {
+    "customerId": {
+        presence: true,
         length: {
             is: 24
         },
         type: "string"
     },
-    "name": {
+    "value": {
         presence: true,
-        type: "string"
+        type: "integer"
     },
-    "description": {
+    "deliveryTime": {
         presence: true,
-        type: "string"
+        type: "integer"
     },
-    "disabled": {
+    "products": {
         presence: true,
-        type: "boolean"
-    },
-    "service": {
-        presence: true,
-        type: "boolean"
+        type: "array"
     }
 };
 
-exports.deleteProduct = {
+exports.deletePurchase = {
+    "purchaseId": {
+        presence: true,
+        length: {
+            is: 24
+        },
+        type: "string"
+    }
+};
+
+exports.getPurchase = {
     "productId": {
-        presence: {
-            allowEmpty: false
-        },
-        length: {
-            is: 24
-        },
-        type: "string"
-    }
-};
-
-exports.getProduct = {
-    "productId": {
-        presence: {
-            allowEmpty: false
-        },
-        length: {
-            is: 24
-        },
-        type: "string"
-    }
-};
-
-exports.getProducts = {
-    "query.companyId": {
         presence: true,
         length: {
             is: 24
         },
         type: "string"
     },
-    "query.service": {
-        type: "boolean"
-    },
-    "query.disabled": {
-        type: "boolean"
+    "date": {
+        type: "integer"
+    }
+};
+
+exports.getPurchases = {
+    "customerId": {
+        presence: true,
+        length: {
+            is: 24
+        },
+        type: "string"
     },
     "pageSize": {
         presence: true,
@@ -77,29 +67,21 @@ exports.getProducts = {
     }
 };
 
-exports.updateProduct = {
-    "productId": {
+exports.updatePurchase = {
+    "purchaseId": {
+        presence: true,
         length: {
             is: 24
         },
         type: "string"
     },
-    "companyId": {
-        length: {
-            is: 24
-        },
-        type: "string"
+    "value": {
+        type: "integer"
     },
-    "name": {
-        type: "string"
+    "deliveryTime": {
+        type: "integer"
     },
-    "description": {
-        type: "string"
-    },
-    "disabled": {
-        type: "boolean"
-    },
-    "service": {
-        type: "boolean"
+    "products": {
+        type: "array"
     }
 };
