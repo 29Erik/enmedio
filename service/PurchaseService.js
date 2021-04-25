@@ -2,8 +2,11 @@
 // Dependencies
 const validate = require('validate.js');
 const _ = require('lodash');
+const MongooseExtras = require("mongoose");
 // Models
 const Purchase = require('../models/Purchase');
+const Customer = require('../models/Customer');
+const Product = require('../models/Product');
 // Utils
 const msg = require('../utils/messages').msg;
 const constraints = require('../constraints/Purchase');
@@ -20,7 +23,25 @@ exports.createPurchase = function(customerId, body) {
     return new Promise(function(resolve, reject) {
         validate.async(body, constraints.createPurchase, {format: "flat"})
             .then(() => {
-
+                Promise.all(
+                    Array.from([
+                        body.products, product => Product.findById(product.productId).lean(),
+                        Customer.findByIdAndUpdate(customerId).lean()
+                ]))
+                    .then(results => {
+                        let products = results[0];
+                        let customer = results[1];
+                        if (_.isEmpty(products) || _.find(products, _.isNil)) {
+                            return reject(msg.not_found("Products"));
+                        }
+                        Promise.all([
+                            Purchase.create(body),
+                            Customer.findByIdAndUpdate(customerId, {purchaseMade: customer.purchaseMade+1})
+                        ])
+                            .then(() => resolve(msg.ok()))
+                            .catch(err => reject(msg.internal_error(err)));
+                    })
+                    .catch(err => reject(msg.internal_error(err)));
             })
             .catch(error => reject(msg.format(error[0])));
     });
@@ -39,7 +60,9 @@ exports.deletePurchase = function(purchaseId) {
             purchaseId: purchaseId
         }, constraints.deletePurchase, {format: "flat"})
             .then(() => {
-
+                Purchase.findByIdAndDelete(purchaseId)
+                    .then(() => resolve(msg.ok()))
+                    .catch(err => reject(msg.internal_error(err)));
             })
             .catch(error => reject(msg.format(error[0])));
     });
@@ -59,7 +82,9 @@ exports.getPurchase = function(purchaseId) {
             purchaseId: purchaseId
         }, constraints.getPurchase, {format: "flat"})
             .then(() => {
-
+                Purchase.findById(purchaseId).lean()
+                    .then(purchase => resolve(purchase))
+                    .catch(err => reject(msg.internal_error(err)));
             })
             .catch(error => reject(msg.format(error[0])));
     });
@@ -70,22 +95,42 @@ exports.getPurchase = function(purchaseId) {
  * Get All purchases
  * Get a list of all `Products`
  *
- * companyId String The `Company` ID
+ * customerId String The `Customer` ID
  * pageSize Long The number of records by page
  * keyPage Long The number of the page
  * date Integer The timestamp of the purchase
  * returns List
  **/
-exports.getPurchases = function(companyId,pageSize,keyPage, date) {
+exports.getPurchases = function(customerId,pageSize,keyPage, startDate, endDate) {
     return new Promise(function(resolve, reject) {
         validate.async({
             companyId: companyId,
             pageSize: pageSize,
             keyPage: keyPage,
-            date: date
+            startDate: startDate,
+            endDate: endDate
         }, constraints.getPurchases, {format: "flat"})
             .then(() => {
-
+                Customer.find({
+                    _id: MongooseExtras.Types.ObjectId(customerId),
+                    deleted: false
+                }).lean()
+                    .then(company => {
+                        if (_.isNil(company)) return reject(msg.not_found("Company"));
+                        let query = {
+                            companyId: companyId,
+                            pageSize: pageSize,
+                            keyPage: keyPage,
+                        }
+                        if (startDate > endDate) return reject(msg.bad_entry("Start Date", "End Date"));
+                        if (!_.isNil(startDate) && !_.isNil(endDate)) {
+                            query.date = {$gt: query.startDate, $lt: query.endDate}
+                        }
+                        Purchase.find(_.omitBy(query, _.isNil)).limit(pageSize).skip(pageSize * (keyPage - 1)).lean()
+                            .then(resp=> resolve(resp))
+                            .catch(err => reject(msg.internal_error(err)));
+                    })
+                    .catch(err => reject(msg.internal_error(err)));
             })
             .catch(error => reject(msg.format(error[0])));
     });
@@ -105,7 +150,9 @@ exports.updatePurchase = function(body,purchaseId) {
     return new Promise(function(resolve, reject) {
         validate.async(body, constraints.updatePurchase, {format: "flat"})
             .then(() => {
-
+                Purchase.findByIdAndUpdate(purchaseId, body)
+                    .then(() => resolve(msg.ok()))
+                    .catch(err => reject(msg.internal_error(err)));
             })
             .catch(error => reject(msg.format(error[0])));
     });

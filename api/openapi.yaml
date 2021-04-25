@@ -536,9 +536,16 @@ paths:
           schema:
             type: integer
             format: int64
-        - name: date
+        - name: startDate
           in: query
-          description: The Date of `Purchase`
+          description: The Start Date Range of `Purchase`
+          style: simple
+          explode: false
+          schema:
+            type: integer
+        - name: endDate
+          in: query
+          description: The Start Date Range of `Purchase`
           style: simple
           explode: false
           schema:
@@ -874,7 +881,7 @@ components:
         deliveryTime:
           type: integer
           format: int64
-          description: Delivery Time for the `Product`
+          description: Delivery Time for the `Product` in minutes
         products:
           type: array
           description: Products bought by the `Customer`
@@ -883,7 +890,7 @@ components:
       example:
         customerId: 5efe6bf2bbf35da0d039a6b8
         value: 13248123
-        deliveryTime: Fruta jugosa
+        deliveryTime: 145
         products:
           - productId: 5efe6bf2bbf35da0d039a6b8
             qty: 5

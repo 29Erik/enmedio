@@ -18,7 +18,11 @@ exports.createCompany = function(body) {
   return new Promise(function(resolve, reject) {
     validate.async(body, constraints.createCompany, {format: "flat"})
         .then(() => {
-
+            body.createdOn = Date.now();
+            body.deleted = false;
+            Company.create(body)
+                .then(() => resolve(msg.ok()))
+                .catch(err => reject(msg.internal_error(err)));
         })
         .catch(error => reject(msg.format(error[0])));
   });
@@ -37,7 +41,12 @@ exports.deleteCompany = function(companyId) {
         companyId: companyId
     }, constraints.deleteCompany, {format: "flat"})
         .then(() => {
-
+            Company.findByIdAndUpdate(companyId, {deleted: true})
+                .then(resp => {
+                    if (_.isNil(resp)) return reject(msg.not_found("Company"));
+                    resolve(msg.ok());
+                })
+                .catch(err => reject(msg.internal_error(err)));
         })
         .catch(error => reject(msg.format(error[0])));
   });
@@ -65,7 +74,16 @@ exports.getCompanies = function(pageSize, keyPage, name, email, deleted) {
         deleted: deleted
     }, constraints.getCompanies, {format: "flat"})
         .then(() => {
-
+            let query = {
+                pageSize: pageSize,
+                keyPage: keyPage,
+                name: name,
+                email: email,
+                deleted: deleted
+            }
+            Company.find(_.omitBy(query, _.isNil)).limit(pageSize).skip(pageSize * (keyPage - 1)).lean()
+                .then(resp => resolve(resp))
+                .catch(err => reject(msg.internal_error(err)));
         })
         .catch(error => reject(msg.format(error[0])));
   });
@@ -85,7 +103,9 @@ exports.getCompany = function(companyId) {
         companyId: companyId
     }, constraints.getCompany, {format: "flat"})
         .then(() => {
-
+            Company.findById(companyId).lean()
+                .then(resp => resolve(resp))
+                .catch(err => reject(msg.internal_error(err)));
         })
         .catch(error => reject(msg.format(error[0])));
   });
@@ -105,7 +125,9 @@ exports.updateCompany = function(body,companyId) {
   return new Promise(function(resolve, reject) {
     validate.async(body, constraints.createCompany, {format: "flat"})
         .then(() => {
-
+            Company.findByIdAndUpdate(companyId, body)
+                .then(() => resolve(msg.ok()))
+                .catch(err => reject(msg.internal_error(err)));
         })
         .catch(error => reject(msg.format(error[0])));
   });

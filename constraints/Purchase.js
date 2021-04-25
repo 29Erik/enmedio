@@ -62,7 +62,10 @@ exports.getPurchases = {
             greaterThan: 0,
         }
     },
-    "date": {
+    "startDate": {
+        type: "integer"
+    },
+    "endDate": {
         type: "integer"
     }
 };

@@ -2,8 +2,10 @@
 // Dependencies
 const validate = require('validate.js');
 const _ = require('lodash');
+const MongooseExtras = require("mongoose");
 // Models
 const Product = require('../models/Product');
+const Company = require('../models/Company');
 // Utils
 const msg = require('../utils/messages').msg;
 const constraints = require('../constraints/Product');
@@ -20,7 +22,21 @@ exports.createProduct = function(companyId, body) {
   return new Promise(function(resolve, reject) {
     validate.async(body, constraints.createProduct, {format: "flat"})
         .then(() => {
-
+            Company.find({
+                _id: MongooseExtras.Types.ObjectId(companyId),
+                deleted: false
+            }).lean()
+                .then(company => {
+                    if (_.isNil(company)) return reject(msg.not_found("Company"));
+                    body.createdOn = Date.now();
+                    body.deleted = false;
+                    body.score = [];
+                    body.averageScore = 0;
+                    Product.create(body)
+                        .then(() => resolve(msg.ok()))
+                        .catch(err => reject(msg.internal_error(err)));
+                })
+                .catch(err => reject(msg.internal_error(err)));
         })
         .catch(error => reject(msg.format(error[0])));
   });
@@ -39,7 +55,9 @@ exports.deleteProduct = function(productId) {
         productId: productId
     }, constraints.deleteProduct, {format: "flat"})
         .then(() => {
-
+            Product.findByIdAndUpdate(productId, {deleted: true})
+                .then(() => resolve(msg.ok()))
+                .catch(err => reject(msg.internal_error(err)));
         })
         .catch(error => reject(msg.format(error[0])));
   });
@@ -60,7 +78,9 @@ exports.getProduct = function(productId) {
         productId: productId
     }, constraints.getProduct, {format: "flat"})
         .then(() => {
-
+            Product.findById(productId).lean()
+                .then(product => resolve(product))
+                .catch(err => reject(msg.internal_error(err)));
         })
         .catch(error => reject(msg.format(error[0])));
   });
@@ -92,7 +112,26 @@ exports.getProducts = function(companyId, pageSize, keyPage, name, price, stock,
         deleted: deleted
     }, constraints.getProducts, {format: "flat"})
         .then(() => {
-
+            Company.find({
+                _id: MongooseExtras.Types.ObjectId(companyId),
+                deleted: false
+            }).lean()
+                .then(company => {
+                    if (_.isNil(company)) return reject(msg.not_found("Company"));
+                    let query = {
+                        companyId: companyId,
+                        pageSize: pageSize,
+                        keyPage: keyPage,
+                        name: name,
+                        price: price,
+                        stock: stock,
+                        deleted: deleted
+                    }
+                    Product.find(_.omitBy(query, _.isNil)).limit(pageSize).skip(pageSize * (keyPage - 1)).lean()
+                        .then(resp=> resolve(resp))
+                        .catch(err => reject(msg.internal_error(err)));
+                })
+                .catch(err => reject(msg.internal_error(err)));
         })
         .catch(error => reject(msg.format(error[0])));
   });
@@ -112,7 +151,9 @@ exports.updateProduct = function(body,productId) {
   return new Promise(function(resolve, reject) {
     validate.async(body, constraints.updateProduct, {format: "flat"})
         .then(() => {
-
+            Product.findByIdAndUpdate(productId, body)
+                .then(() => resolve(msg.ok()))
+                .catch(err => reject(msg.internal_error(err)));
         })
         .catch(error => reject(msg.format(error[0])));
   });

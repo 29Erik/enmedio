@@ -2,8 +2,10 @@
 // Dependencies
 const validate = require('validate.js');
 const _ = require('lodash');
+const MongooseExtras = require("mongoose");
 // Models
 const Customer = require('../models/Customers');
+const Company = require('../models/Company');
 // Utils
 const msg = require('../utils/messages').msg;
 const constraints = require('../constraints/Customer');
@@ -20,7 +22,20 @@ exports.createCustomer = function(companyId, body) {
   return new Promise(function(resolve, reject) {
     validate.async(body, constraints.createCustomer, {format: "flat"})
         .then(() => {
-
+            body.createdOn = Date.now();
+            body.deleted = false;
+            body.purchaseMade = 0;
+            Company.find({
+                _id: MongooseExtras.Types.ObjectId(companyId),
+                deleted: false
+            }).lean()
+                .then(company => {
+                    if (_.isNil(company)) return reject(msg.not_found("Company"));
+                    Customer.create()
+                        .then(() => resolve(msg.ok()))
+                        .catch(err => reject(msg.internal_error(err)));
+                })
+                .catch(err => reject(msg.internal_error(err)));
         })
         .catch(error => reject(msg.format(error[0])));
   });
@@ -39,7 +54,9 @@ exports.deleteCustomer = function(customerId) {
         customerId: customerId
     }, constraints.deleteCustomer(), {format: "flat"})
         .then(() => {
-
+            Customer.findByIdAndUpdate(customerId, {deleted: true})
+                .then(() => resolve(msg.ok()))
+                .catch(err => reject(msg.internal_error(err)));
         })
         .catch(error => reject(msg.format(error[0])));
   });
@@ -59,7 +76,9 @@ exports.getCustomer = function(customerId) {
         customerId: customerId
     }, constraints.getCustomer, {format: "flat"})
         .then(() => {
-
+            Customer.findById(customerId)
+                .then(resp => resolve(resp))
+                .catch(err => reject(msg.internal_error(err)));
         })
         .catch(error => reject(msg.format(error[0])));
   });
@@ -89,7 +108,25 @@ exports.getCustomers = function(companyId, pageSize, keyPage, name, email, delet
         deleted: deleted
     }, constraints.getCustomers, {format: "flat"})
         .then(() => {
-
+            Company.find({
+                _id: MongooseExtras.Types.ObjectId(companyId),
+                deleted: false
+            }).lean()
+                .then(company => {
+                    if (_.isNil(company)) return reject(msg.not_found("Company"));
+                    let query = {
+                        companyId: companyId,
+                        pageSize: pageSize,
+                        keyPage: keyPage,
+                        name: name,
+                        email: email,
+                        deleted: deleted
+                    }
+                    Customer.find(_.omitBy(query, _.isNil)).limit(pageSize).skip(pageSize * (keyPage - 1)).lean()
+                        .then(resp=> resolve(resp))
+                        .catch(err => reject(msg.internal_error(err)));
+                })
+                .catch(err => reject(msg.internal_error(err)));
         })
         .catch(error => reject(msg.format(error[0])));
   });
@@ -109,7 +146,9 @@ exports.updateCustomer = function(body,customerId) {
   return new Promise(function(resolve, reject) {
     validate.async(body, constraints.createCustomer, {format: "flat"})
         .then(() => {
-
+            Customer.findByIdAndUpdate(customerId, body)
+                .then(() => resolve(msg.ok()))
+                .catch(err => reject(msg.internal_error(err)));
         })
         .catch(error => reject(msg.format(error[0])));
   });

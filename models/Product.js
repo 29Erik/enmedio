@@ -14,6 +14,7 @@ let ProductSchema = new Schema({
     score: Score,
     createdOn: Number,
     stock: Number,
+    averageScore: Number,
     deleted: Boolean
 });
 

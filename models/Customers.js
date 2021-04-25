@@ -7,6 +7,7 @@ let CustomerSchema = new Schema({
     description: String,
     email: String,
     createdOn: Number,
+    purchaseMade: Number,
     deleted: Boolean
 });
 
