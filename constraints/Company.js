@@ -5,15 +5,6 @@ exports.getCompany = {
         length: {
             is: 24
         }
-    },
-    "query.name": {
-        type: "string"
-    },
-    "query.email": {
-        email: true
-    },
-    "query.deleted": {
-        type: "boolean"
     }
 };
 
@@ -31,6 +22,12 @@ exports.getCompanies = {
             onlyInteger: true,
             greaterThan: 0,
         }
+    },
+    "name": {
+        type: "string"
+    },
+    "email": {
+        email: true
     },
     "deleted": {
         type: "boolean"

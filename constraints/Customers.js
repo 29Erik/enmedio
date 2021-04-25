@@ -36,15 +36,6 @@ exports.getCustomer = {
             is: 24
         },
         type: "string"
-    },
-    "query.name": {
-        type: "string"
-    },
-    "query.email": {
-        email: true
-    },
-    "query.deleted": {
-        type: "boolean"
     }
 };
 
@@ -70,8 +61,14 @@ exports.getCustomers = {
             greaterThan: 0,
         }
     },
+    "name": {
+        type: "string"
+    },
+    "email": {
+        email: true
+    },
     "deleted": {
-        type: 'boolean'
+        type: "boolean"
     }
 };
 

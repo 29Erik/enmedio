@@ -3,8 +3,8 @@
 var utils = require('../utils/writer.js');
 var Customers = require('../service/CustomersService');
 
-module.exports.createCustomer = function createCustomer (req, res, next, customerId) {
-  Customers.createCustomer(customerId)
+module.exports.createCustomer = function createCustomer (req, res, next, companyId, body) {
+  Customers.createCustomer(companyId, body)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -23,8 +23,8 @@ module.exports.deleteCustomer = function deleteCustomer (req, res, next, custome
     });
 };
 
-module.exports.getCustomer = function getCustomer (req, res, next, customerId, deleted) {
-  Customers.getCustomer(customerId, deleted)
+module.exports.getCustomer = function getCustomer (req, res, next, customerId) {
+  Customers.getCustomer(customerId, name, email, deleted)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -33,8 +33,8 @@ module.exports.getCustomer = function getCustomer (req, res, next, customerId, d
     });
 };
 
-module.exports.getCustomers = function getCustomers (req, res, next, companyId, pageSize, keyPage, deleted) {
-  Customers.getCustomers(companyId, pageSize, keyPage, deleted)
+module.exports.getCustomers = function getCustomers (req, res, next, companyId, pageSize, keyPage, name, email, deleted) {
+  Customers.getCustomers(companyId, pageSize, keyPage, name, email, deleted)
     .then(function (response) {
       utils.writeJson(res, response);
     })

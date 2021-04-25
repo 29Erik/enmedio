@@ -40,18 +40,6 @@ exports.getProduct = {
             is: 24
         },
         type: "string"
-    },
-    "query.name": {
-        type: "string"
-    },
-    "query.price": {
-        type: "integer"
-    },
-    "query.stock": {
-        type: "integer"
-    },
-    "query.deleted": {
-        type: "boolean"
     }
 };
 
@@ -76,6 +64,15 @@ exports.getProducts = {
             onlyInteger: true,
             greaterThan: 0,
         }
+    },
+    "name": {
+        type: "string"
+    },
+    "price": {
+        type: "integer"
+    },
+    "stock": {
+        type: "integer"
     },
     "deleted": {
         type: "boolean"

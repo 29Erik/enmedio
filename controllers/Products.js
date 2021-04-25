@@ -3,8 +3,8 @@
 var utils = require('../utils/writer.js');
 var Products = require('../service/ProductsService');
 
-module.exports.createProduct = function createProduct (req, res, next, productId) {
-  Products.createProduct(productId)
+module.exports.createProduct = function createProduct (req, res, next, companyId, body) {
+  Products.createProduct(companyId, body)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -23,8 +23,8 @@ module.exports.deleteProduct = function deleteProduct (req, res, next, productId
     });
 };
 
-module.exports.getProduct = function getProduct (req, res, next, productId, deleted) {
-  Products.getProduct(productId, deleted)
+module.exports.getProduct = function getProduct (req, res, next, productId) {
+  Products.getProduct(productId, name, price, stock, deleted)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -33,8 +33,8 @@ module.exports.getProduct = function getProduct (req, res, next, productId, dele
     });
 };
 
-module.exports.getProducts = function getProducts (req, res, next, companyId, pageSize, keyPage, deleted) {
-  Products.getProducts(companyId, pageSize, keyPage, deleted)
+module.exports.getProducts = function getProducts (req, res, next, companyId, pageSize, keyPage, name, price, stock, deleted) {
+  Products.getProducts(companyId, pageSize, keyPage, name, price, stock, deleted)
     .then(function (response) {
       utils.writeJson(res, response);
     })

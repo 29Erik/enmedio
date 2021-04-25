@@ -37,9 +37,6 @@ exports.getPurchase = {
             is: 24
         },
         type: "string"
-    },
-    "date": {
-        type: "integer"
     }
 };
 
@@ -64,6 +61,9 @@ exports.getPurchases = {
             onlyInteger: true,
             greaterThan: 0,
         }
+    },
+    "date": {
+        type: "integer"
     }
 };
 

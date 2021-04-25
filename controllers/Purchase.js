@@ -3,8 +3,8 @@
 var utils = require('../utils/writer.js');
 var Purchase = require('../service/PurchaseService');
 
-module.exports.createPurchase = function createPurchase (req, res, next, purchaseId) {
-    Purchase.createPurchase(purchaseId)
+module.exports.createPurchase = function createPurchase (req, res, next, customerId, body) {
+    Purchase.createPurchase(customerId, body)
         .then(function (response) {
             utils.writeJson(res, response);
         })
@@ -33,8 +33,8 @@ module.exports.getPurchase = function getPurchase (req, res, next, purchaseId) {
         });
 };
 
-module.exports.getPurchases = function getPurchases (req, res, next, companyId, pageSize, keyPage) {
-    Purchase.getPurchases(companyId, pageSize, keyPage)
+module.exports.getPurchases = function getPurchases (req, res, next, companyId, pageSize, keyPage, date) {
+    Purchase.getPurchases(companyId, pageSize, keyPage, date)
         .then(function (response) {
             utils.writeJson(res, response);
         })

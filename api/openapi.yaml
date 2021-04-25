@@ -51,9 +51,25 @@ paths:
         schema:
           type: integer
           format: int64
+      - name: name
+        in: query
+        description: Filter by `Company`
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: email
+        in: query
+        description: Filter by `Company`
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
       - name: deleted
         in: query
-        description: if the company is deleted
+        description: Filter by `Company`
         required: false
         style: form
         explode: true
@@ -100,30 +116,6 @@ paths:
         explode: false
         schema:
           type: string
-      - name: name
-        in: query
-        description: Filter by `Company`
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
-      - name: email
-        in: query
-        description: Filter by `Company`
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
-      - name: deleted
-        in: query
-        description: Filter by `Company`
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: boolean
       responses:
         "200":
           description: successful operation
@@ -212,9 +204,25 @@ paths:
         schema:
           type: integer
           format: int64
+      - name: name
+        in: query
+        description: Filter by `Customer`
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: email
+        in: query
+        description: Filter by `Customer`
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
       - name: deleted
         in: query
-        description: if the customer is deleted
+        description: Filter by `Customer`
         required: false
         style: form
         explode: true
@@ -270,30 +278,6 @@ paths:
         explode: false
         schema:
           type: string
-      - name: name
-        in: query
-        description: Filter by `Customer`
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
-      - name: email
-        in: query
-        description: Filter by `Customer`
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
-      - name: deleted
-        in: query
-        description: Filter by `Customer`
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: boolean
       responses:
         "200":
           description: successful operation
@@ -382,9 +366,33 @@ paths:
         schema:
           type: integer
           format: int64
+      - name: name
+        in: query
+        description: Filter by `Product`
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: price
+        in: query
+        description: Filter by `Product`
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+      - name: stock
+        in: query
+        description: Filter by `Product`
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
       - name: deleted
         in: query
-        description: if the product is deleted
+        description: Filter by `Product`
         required: false
         style: form
         explode: true
@@ -440,38 +448,6 @@ paths:
         explode: false
         schema:
           type: string
-      - name: name
-        in: query
-        description: Filter by `Product`
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: string
-      - name: price
-        in: query
-        description: Filter by `Product`
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: integer
-      - name: stock
-        in: query
-        description: Filter by `Product`
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: integer
-      - name: deleted
-        in: query
-        description: Filter by `Product`
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: boolean
       responses:
         "200":
           description: successful operation
@@ -560,6 +536,13 @@ paths:
           schema:
             type: integer
             format: int64
+        - name: date
+          in: query
+          description: The Date of `Purchase`
+          style: simple
+          explode: false
+          schema:
+            type: integer
       responses:
         "200":
           description: Successful response - returns an array of `Products` entities.
@@ -610,13 +593,6 @@ paths:
           explode: false
           schema:
             type: string
-        - name: date
-          in: query
-          description: The Date of `Purchase`
-          style: simple
-          explode: false
-          schema:
-            type: integer
       responses:
         "200":
           description: successful operation
