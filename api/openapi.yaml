@@ -149,7 +149,7 @@ paths:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/body'
+              $ref: '#/components/schemas/CompanyRequest'
       responses:
         "201":
           description: Successful response.
@@ -303,7 +303,7 @@ paths:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/body_1'
+              $ref: '#/components/schemas/CustomerRequest'
       responses:
         "201":
           description: Successful response.
@@ -457,7 +457,7 @@ paths:
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/body_2'
+              $ref: '#/components/schemas/ProductRequest'
       responses:
         "201":
           description: Successful response.
@@ -478,7 +478,153 @@ paths:
       responses:
         "201":
           description: Successful response.
-      x-swagger-router-controller: Customers
+      x-swagger-router-controller: Products
+  /customers/{customerId}/purchase:
+    get:
+      tags:
+        - Purchase
+      summary: Get All `Purchase` by a `Customer`
+      description: Get a list of all `Purchase`
+      operationId: getPurchases
+      parameters:
+        - name: customerId
+          in: path
+          description: The `Customer` ID
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+        - name: pageSize
+          in: query
+          description: The number of records by page
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: integer
+            format: int64
+        - name: keyPage
+          in: query
+          description: The number of the page
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: integer
+            format: int64
+        - name: deleted
+          in: query
+          description: if the product is deleted
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: Successful response - returns an array of `Products` entities.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductResponse'
+                x-content-type: application/json
+      x-swagger-router-controller: Purchase
+  /purchase/{purchaseId}:
+    get:
+      tags:
+        - Purchase
+      summary: Finds `Purchase` by Id
+      description: Get a single instance of a `Purchase`
+      operationId: getPurchase
+      parameters:
+        - name: purchaseId
+          in: path
+          description: The `Purchase` ID
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PurchaseResponse'
+                x-content-type: application/json
+      x-swagger-router-controller: Purchase
+    put:
+      tags:
+        - Purchase
+      summary: Update `Purchase` in case of error
+      description: Update `Purchase`.
+      operationId: updatePurchase
+      parameters:
+        - name: purchaseId
+          in: path
+          description: The `Purchase` ID
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        description: Updated `Product` object
+        content:
+          '*/*':
+            schema:
+              $ref: '#/components/schemas/PurchaseRequest'
+        required: true
+      responses:
+        "202":
+          description: Successful response.
+      x-swagger-router-controller: Purchase
+    post:
+      tags:
+        - Purchase
+      summary: Create an instance of the `Purchase`
+      operationId: createPurchase
+      parameters:
+        - name: purchaseId
+          in: path
+          description: The `PurchaseId`
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PurchaseRequest'
+      responses:
+        "201":
+          description: Successful response.
+      x-swagger-router-controller: Purchase
+    delete:
+      tags:
+        - Purchase
+      summary: Deletes a `Purchase`
+      operationId: deletePurchase
+      parameters:
+        - name: purchaseId
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+      responses:
+        "201":
+          description: Successful response.
+      x-swagger-router-controller: Purchase
 components:
   schemas:
     CompanyResponse:
@@ -648,50 +794,6 @@ components:
         description: Fruta jugosa
         price: 12348
         stock: 48
-    body:
-      properties:
-        name:
-          type: string
-          description: Name of the `Company`
-        email:
-          type: string
-          description: Email of the `Company`
-        deleted:
-          type: boolean
-          description: If the `Company` is in deleted state
-    body_1:
-      properties:
-        companyId:
-          type: string
-          description: Id of the `Company`
-        name:
-          type: string
-          description: Name of the `Customer`
-        email:
-          type: string
-          description: Email of the `Customer`
-        description:
-          type: boolean
-          description: Description of the `Customer`
-    body_2:
-      properties:
-        companyId:
-          type: string
-          description: Id of the `Company`
-        name:
-          type: string
-          description: Name of the `Product`
-        description:
-          type: string
-          description: Description of the `Product`
-        price:
-          type: integer
-          description: Price of the `Product`
-          format: int64
-        stock:
-          type: integer
-          description: Stock of the `Product`
-          format: int64
     ProductResponse_score:
       type: object
       properties:
@@ -702,3 +804,85 @@ components:
           type: integer
           description: Score for the qualit of the `Product`
           format: int64
+    PurchaseResponse:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Autogenerated `Mongo` ID
+        customerId:
+          type: string
+          description: The `Customer` related
+        value:
+          type: integer
+          format: int64
+          description: Value for the `Product`
+        deliveryTime:
+          type: integer
+          format: int64
+          description: Delivery Time for the `Product`
+        products:
+          type: array
+          description: Products bought by the `Customer`
+          items:
+            $ref: '#/components/schemas/ProductDetail'
+        date:
+          type: integer
+          format: int64
+          description: Date of `Purchase` for the `Product`
+      example:
+        _id: 5efe6bf2bbf35da0d039a6b8
+        customerId: 5efe6bf2bbf35da0d039a6b8
+        value: 13248123
+        deliveryTime: Fruta jugosa
+        products:
+          - productId: 5efe6bf2bbf35da0d039a6b8
+            qty: 5
+          - productId: 5efe6bf2bbf35da0d039a6b8
+            qty: 4
+          - productId: 5efe6bf2bbf35da0d039a6b8
+            qty: 3
+        date: 1593732082206
+    PurchaseRequest:
+      type: object
+      properties:
+        customerId:
+          type: string
+          description: The `Customer` related
+        value:
+          type: integer
+          format: int64
+          description: Value for the `Product`
+        deliveryTime:
+          type: integer
+          format: int64
+          description: Delivery Time for the `Product`
+        products:
+          type: array
+          description: Products bought by the `Customer`
+          items:
+            $ref: '#/components/schemas/ProductDetail'
+      example:
+        customerId: 5efe6bf2bbf35da0d039a6b8
+        value: 13248123
+        deliveryTime: Fruta jugosa
+        products:
+          - productId: 5efe6bf2bbf35da0d039a6b8
+            qty: 5
+          - productId: 5efe6bf2bbf35da0d039a6b8
+            qty: 4
+          - productId: 5efe6bf2bbf35da0d039a6b8
+            qty: 3
+    ProductDetail:
+      type: object
+      properties:
+        productId:
+          type: string
+          description: The `Product` related
+        qty:
+          type: integer
+          format: int64
+          description: Quantity of `Product` bought
+      example:
+        productId: 5efe6bf2bbf35da0d039a6b8
+        qty: 48

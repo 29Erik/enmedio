@@ -4,8 +4,8 @@
   "description": "This is a sample server for automatize process for x Company by his products, customers, and KPI.",
   "main": "index.js",
   "scripts": {
-	"prestart": "npm install",
-	"start": "node index.js"
+    "prestart": "npm install",
+    "start": "node index.js"
   },
   "keywords": [
     "swagger"
@@ -15,6 +15,7 @@
   "dependencies": {
     "connect": "^3.2.0",
     "js-yaml": "^3.3.0",
+    "lodash": "^4.17.21",
     "oas3-tools": "^2.2.3"
   }
 }
