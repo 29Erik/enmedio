@@ -61,6 +61,9 @@ exports.getCustomers = {
             greaterThan: 0,
         }
     },
+    "top": {
+        type: "integer"
+    },
     "name": {
         type: "string"
     },

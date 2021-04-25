@@ -8,7 +8,7 @@ const Customer = require('../models/Customers');
 const Company = require('../models/Company');
 // Utils
 const msg = require('../utils/messages').msg;
-const constraints = require('../constraints/Customer');
+const constraints = require('../constraints/Customers');
 
 /**
  * Create an instance of the `Customer`
@@ -97,12 +97,13 @@ exports.getCustomer = function(customerId) {
  * deleted Boolean if the customer is deleted (optional)
  * returns List
  **/
-exports.getCustomers = function(companyId, pageSize, keyPage, name, email, deleted) {
+exports.getCustomers = function(companyId, pageSize, keyPage, top, name, email, deleted) {
   return new Promise(function(resolve, reject) {
     validate.async({
         companyId: companyId,
         pageSize: pageSize,
         keyPage: keyPage,
+        top: top,
         name: name,
         email: email,
         deleted: deleted
@@ -122,9 +123,15 @@ exports.getCustomers = function(companyId, pageSize, keyPage, name, email, delet
                         email: email,
                         deleted: deleted
                     }
-                    Customer.find(_.omitBy(query, _.isNil)).limit(pageSize).skip(pageSize * (keyPage - 1)).lean()
-                        .then(resp=> resolve(resp))
-                        .catch(err => reject(msg.internal_error(err)));
+                    if (!_.isNil(top) && top) {
+                        Customer.find(_.omitBy(query, _.isNil)).sort({purchaseMade: -1}).limit(pageSize).skip(pageSize * (keyPage - 1)).lean()
+                            .then(resp=> resolve(resp))
+                            .catch(err => reject(msg.internal_error(err)));
+                    } else {
+                        Customer.find(_.omitBy(query, _.isNil)).limit(pageSize).skip(pageSize * (keyPage - 1)).lean()
+                            .then(resp=> resolve(resp))
+                            .catch(err => reject(msg.internal_error(err)));
+                    }
                 })
                 .catch(err => reject(msg.internal_error(err)));
         })

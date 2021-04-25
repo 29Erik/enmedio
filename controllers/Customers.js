@@ -33,8 +33,8 @@ module.exports.getCustomer = function getCustomer (req, res, next, customerId) {
     });
 };
 
-module.exports.getCustomers = function getCustomers (req, res, next, companyId, pageSize, keyPage, name, email, deleted) {
-  Customers.getCustomers(companyId, pageSize, keyPage, name, email, deleted)
+module.exports.getCustomers = function getCustomers (req, res, next, companyId, pageSize, keyPage, top, name, email, deleted) {
+  Customers.getCustomers(companyId, pageSize, keyPage, top, name, email, deleted)
     .then(function (response) {
       utils.writeJson(res, response);
     })

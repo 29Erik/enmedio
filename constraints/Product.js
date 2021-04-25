@@ -79,6 +79,30 @@ exports.getProducts = {
     }
 };
 
+exports.getInventoryProducts = {
+    "companyId": {
+        presence: true,
+        length: {
+            is: 24
+        },
+        type: "string"
+    },
+    "pageSize": {
+        presence: true,
+        numericality: {
+            greaterThanOrEqualTo: 1,
+            notGreaterThan: 100,
+        }
+    },
+    "keyPage": {
+        presence: true,
+        numericality: {
+            onlyInteger: true,
+            greaterThan: 0,
+        }
+    }
+};
+
 exports.updateProduct = {
     "productId": {
         presence: true,
@@ -98,5 +122,26 @@ exports.updateProduct = {
     },
     "stock": {
         type: "integer"
+    }
+};
+
+exports.scoreProduct = {
+    "productId": {
+        presence: true,
+        length: {
+            is: 24
+        },
+        type: "string"
+    },
+    "customerId": {
+        presence: true,
+        length: {
+            is: 24
+        },
+        type: "string"
+    },
+    "score": {
+        type: "integer",
+        presence: true
     }
 };

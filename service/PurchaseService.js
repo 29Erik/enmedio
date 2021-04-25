@@ -5,7 +5,7 @@ const _ = require('lodash');
 const MongooseExtras = require("mongoose");
 // Models
 const Purchase = require('../models/Purchase');
-const Customer = require('../models/Customer');
+const Customer = require('../models/Customers');
 const Product = require('../models/Product');
 // Utils
 const msg = require('../utils/messages').msg;
@@ -26,7 +26,7 @@ exports.createPurchase = function(customerId, body) {
                 Promise.all(
                     Array.from([
                         body.products, product => Product.findById(product.productId).lean(),
-                        Customer.findByIdAndUpdate(customerId).lean()
+                        Customer.findById(customerId).lean()
                 ]))
                     .then(results => {
                         let products = results[0];
@@ -34,9 +34,15 @@ exports.createPurchase = function(customerId, body) {
                         if (_.isEmpty(products) || _.find(products, _.isNil)) {
                             return reject(msg.not_found("Products"));
                         }
+                        _.forEach(products, (product, $index) => {
+                            if (product.stock <= 0 || product.stock < body.products[$index].qty){
+                                return reject(msg.format("Not enough items"));
+                            }
+                        })
                         Promise.all([
                             Purchase.create(body),
-                            Customer.findByIdAndUpdate(customerId, {purchaseMade: customer.purchaseMade+1})
+                            Customer.findByIdAndUpdate(customerId, {purchaseMade: customer.purchaseMade+1}),
+                            Promise.all(Array.from(products, (product, $index) => Product.findByIdAndUpdate(product._id, {sold: product.sold + body.products[$index].qty})))
                         ])
                             .then(() => resolve(msg.ok()))
                             .catch(err => reject(msg.internal_error(err)));

@@ -43,6 +43,26 @@ module.exports.getProducts = function getProducts (req, res, next, companyId, pa
     });
 };
 
+module.exports.getInventoryProducts = function getInventoryProducts (req, res, next, companyId, pageSize, keyPage) {
+    Products.getInventoryProducts(companyId, pageSize, keyPage)
+        .then(function (response) {
+            utils.writeJson(res, response);
+        })
+        .catch(function (response) {
+            utils.writeJson(res, response);
+        });
+};
+
+module.exports.scoreProduct = function scoreProduct (req, res, next, productId, body) {
+    Products.scoreProduct(productId, body)
+        .then(function (response) {
+            utils.writeJson(res, response);
+        })
+        .catch(function (response) {
+            utils.writeJson(res, response);
+        });
+};
+
 module.exports.updateProduct = function updateProduct (req, res, next, body, productId) {
   Products.updateProduct(body, productId)
     .then(function (response) {
