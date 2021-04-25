@@ -85,7 +85,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/CompanyResponse'
                 x-content-type: application/json
-      x-swagger-router-controller: Companies
+      x-swagger-router-controller: Company
     post:
       tags:
         - Company
@@ -93,13 +93,13 @@ paths:
       operationId: createCompany
       requestBody:
         content:
-          application/x-www-form-urlencoded:
+          application/json:
             schema:
               $ref: '#/components/schemas/CompanyRequest'
       responses:
         "201":
           description: Successful response.
-      x-swagger-router-controller: Companies
+      x-swagger-router-controller: Company
   /companies/{companyId}:
     get:
       tags:
@@ -126,7 +126,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/CompanyResponse'
                 x-content-type: application/json
-      x-swagger-router-controller: Companies
+      x-swagger-router-controller: Company
     put:
       tags:
       - Company
@@ -152,7 +152,7 @@ paths:
       responses:
         "202":
           description: Successful response.
-      x-swagger-router-controller: Companies
+      x-swagger-router-controller: Company
     delete:
       tags:
       - Company
@@ -169,7 +169,7 @@ paths:
       responses:
         "201":
           description: Successful response.
-      x-swagger-router-controller: Companies
+      x-swagger-router-controller: Company
   /company/{companyId}/customers:
     get:
       tags:
@@ -263,7 +263,7 @@ paths:
             type: string
       requestBody:
         content:
-          application/x-www-form-urlencoded:
+          application/json:
             schema:
               $ref: '#/components/schemas/CustomerRequest'
       responses:
@@ -384,7 +384,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/ProductInventoryResponse'
                 x-content-type: application/json
-      x-swagger-router-controller: Products
+      x-swagger-router-controller: Product
   /company/{companyId}/products:
     get:
       tags:
@@ -461,7 +461,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/ProductResponse'
                 x-content-type: application/json
-      x-swagger-router-controller: Products
+      x-swagger-router-controller: Product
     post:
       tags:
         - Products
@@ -478,13 +478,13 @@ paths:
             type: string
       requestBody:
         content:
-          application/x-www-form-urlencoded:
+          application/json:
             schema:
               $ref: '#/components/schemas/ProductRequest'
       responses:
         "201":
           description: Successful response.
-      x-swagger-router-controller: Products
+      x-swagger-router-controller: Product
   /products/{productId}:
     get:
       tags:
@@ -511,7 +511,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/ProductResponse'
                 x-content-type: application/json
-      x-swagger-router-controller: Products
+      x-swagger-router-controller: Product
     put:
       tags:
       - Products
@@ -537,7 +537,7 @@ paths:
       responses:
         "202":
           description: Successful response.
-      x-swagger-router-controller: Products
+      x-swagger-router-controller: Product
     delete:
       tags:
       - Products
@@ -554,7 +554,7 @@ paths:
       responses:
         "201":
           description: Successful response.
-      x-swagger-router-controller: Products
+      x-swagger-router-controller: Product
     patch:
       tags:
       - Products
@@ -580,7 +580,7 @@ paths:
       responses:
         "202":
           description: Successful response.
-      x-swagger-router-controller: Products
+      x-swagger-router-controller: Product
   /customers/{customerId}/purchase:
     get:
       tags:
@@ -656,7 +656,7 @@ paths:
             type: string
       requestBody:
         content:
-          application/x-www-form-urlencoded:
+          application/json:
             schema:
               $ref: '#/components/schemas/PurchaseRequest'
       responses:
@@ -768,7 +768,7 @@ components:
           description: Name for the `Company`
         email:
           type: string
-          description: int32
+          description: Email of the `Company`
       example:
         name: XYZ
         email: xyz@gmail.com
