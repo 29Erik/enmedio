@@ -31,7 +31,7 @@ exports.deletePurchase = {
 };
 
 exports.getPurchase = {
-    "productId": {
+    "purchaseId": {
         presence: true,
         length: {
             is: 24

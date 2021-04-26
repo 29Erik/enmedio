@@ -29,11 +29,10 @@ exports.createPurchase = function(customerId, body) {
                 }).lean()
                     .then(customer => {
                         if (_.isNil(customer)) return reject(msg.not_found("Customer"));
-                        Promise.all(Array.from([
+                        Promise.all(Array.from(
                             body.products, product => Product.findById(product.productId).lean(),
-                        ]))
+                        ))
                             .then(products => {
-                                products = products[0];
                                 if (_.isEmpty(products) || _.find(products, _.isNil)) {
                                     return reject(msg.not_found("Products"));
                                 }
@@ -120,21 +119,21 @@ exports.getPurchase = function(purchaseId) {
 exports.getPurchases = function(customerId,pageSize,keyPage, startDate, endDate) {
     return new Promise(function(resolve, reject) {
         validate.async({
-            companyId: companyId,
+            customerId: customerId,
+            pageSize: pageSize,
+            keyPage: keyPage,
             startDate: startDate,
             endDate: endDate
         }, constraints.getPurchases, {format: "flat"})
             .then(() => {
-                Customer.find({
+                Customer.findOne({
                     _id: MongooseExtras.Types.ObjectId(customerId),
                     deleted: false
                 }).lean()
-                    .then(company => {
-                        if (_.isNil(company)) return reject(msg.not_found("Company"));
+                    .then(customer => {
+                        if (_.isNil(customer)) return reject(msg.not_found("Customer"));
                         let query = {
-                            companyId: companyId,
-                            pageSize: pageSize,
-                            keyPage: keyPage,
+                            customerId: customerId
                         }
                         if (startDate > endDate) return reject(msg.bad_entry("Start Date", "End Date"));
                         if (!_.isNil(startDate) && !_.isNil(endDate)) {

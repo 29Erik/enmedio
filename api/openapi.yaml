@@ -22,6 +22,8 @@ tags:
   description: The `Products` related to the `Company`
 - name: Purchase
   description: All `Purchase` related to a `Customer`
+- name: Hackerrank
+  description: The problem of Array Manipulation
 paths:
   /company:
     get:
@@ -688,7 +690,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/PurchaseResponse'
-                x-content-type: application/json
       x-swagger-router-controller: Purchase
     put:
       tags:
@@ -733,6 +734,87 @@ paths:
         "201":
           description: Successful response.
       x-swagger-router-controller: Purchase
+  /hackerrank:
+    get:
+      tags:
+        - Hackerrank
+      summary: Reuturn the greatest value on the array
+      description: Get the greatest value on the array by the modifications
+      operationId: getArrayManipulation
+      parameters:
+        - name: A0
+          in: query
+          description: The `Vector in 0`
+          style: form
+          explode: false
+          schema:
+            type: integer
+        - name: A1
+          in: query
+          description: The `Vector in 1`
+          style: form
+          explode: false
+          schema:
+            type: integer
+        - name: A2
+          in: query
+          description: The `Vector in 2`
+          style: form
+          explode: false
+          schema:
+            type: integer
+        - name: B0
+          in: query
+          description: The `Vector in 0`
+          style: form
+          explode: false
+          schema:
+            type: integer
+        - name: B1
+          in: query
+          description: The `Vector in 1`
+          style: form
+          explode: false
+          schema:
+            type: integer
+        - name: B2
+          in: query
+          description: The `Vector in 2`
+          style: form
+          explode: false
+          schema:
+            type: integer
+        - name: K0
+          in: query
+          description: The `Vector in 0`
+          style: form
+          explode: false
+          schema:
+            type: integer
+        - name: K1
+          in: query
+          description: The `Vector in 1`
+          style: form
+          explode: false
+          schema:
+            type: integer
+        - name: K2
+          in: query
+          description: The `Vector in 2`
+          style: form
+          explode: false
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/HackerrankResponse'
+      x-swagger-router-controller: Hackerrank
 components:
   schemas:
     CompanyResponse:
@@ -1071,3 +1153,11 @@ components:
       example:
         customerId: 5efe6bf2bbf35da0d039a6b8
         score: 5
+    HackerrankResponse:
+      type: object
+      properties:
+        value:
+          type: integer
+          description: The greatest value
+      example:
+        value: 5

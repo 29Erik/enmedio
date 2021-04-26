@@ -33,7 +33,7 @@ module.exports.getPurchase = function getPurchase (req, res, next, purchaseId) {
         });
 };
 
-module.exports.getPurchases = function getPurchases (req, res, next, customerId, pageSize, keyPage, startDate, endDate) {
+module.exports.getPurchases = function getPurchases (req, res, next, pageSize, keyPage, startDate, endDate, customerId) {
     Purchase.getPurchases(customerId, pageSize, keyPage, startDate, endDate)
         .then(function (response) {
             utils.writeJson(res, response);
