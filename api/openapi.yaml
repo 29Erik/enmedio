@@ -15,7 +15,7 @@ externalDocs:
   url: https://swagger.io
 servers:
   - url: https://enmediotest.herokuapp.com/
-  - url: http://localhost:8080/docs
+  - url: http://localhost:8080/
 tags:
 - name: Company
   description: Everything related to the creation of `Company` in the platform
