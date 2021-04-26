@@ -75,8 +75,6 @@ exports.getCompanies = function(pageSize, keyPage, name, email, deleted) {
     }, constraints.getCompanies, {format: "flat"})
         .then(() => {
             let query = {
-                pageSize: pageSize,
-                keyPage: keyPage,
                 name: name,
                 email: email,
                 deleted: deleted

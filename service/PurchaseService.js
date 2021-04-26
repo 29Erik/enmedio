@@ -23,28 +23,38 @@ exports.createPurchase = function(customerId, body) {
     return new Promise(function(resolve, reject) {
         validate.async(body, constraints.createPurchase, {format: "flat"})
             .then(() => {
-                Promise.all(
-                    Array.from([
-                        body.products, product => Product.findById(product.productId).lean(),
-                        Customer.findById(customerId).lean()
-                ]))
-                    .then(results => {
-                        let products = results[0];
-                        let customer = results[1];
-                        if (_.isEmpty(products) || _.find(products, _.isNil)) {
-                            return reject(msg.not_found("Products"));
-                        }
-                        _.forEach(products, (product, $index) => {
-                            if (product.stock <= 0 || product.stock < body.products[$index].qty){
-                                return reject(msg.format("Not enough items"));
-                            }
-                        })
-                        Promise.all([
-                            Purchase.create(body),
-                            Customer.findByIdAndUpdate(customerId, {purchaseMade: customer.purchaseMade+1}),
-                            Promise.all(Array.from(products, (product, $index) => Product.findByIdAndUpdate(product._id, {sold: product.sold + body.products[$index].qty})))
-                        ])
-                            .then(() => resolve(msg.ok()))
+                Customer.findOne({
+                    _id: MongooseExtras.Types.ObjectId(customerId),
+                    deleted: false
+                }).lean()
+                    .then(customer => {
+                        if (_.isNil(customer)) return reject(msg.not_found("Customer"));
+                        Promise.all(Array.from([
+                            body.products, product => Product.findById(product.productId).lean(),
+                        ]))
+                            .then(products => {
+                                products = products[0];
+                                if (_.isEmpty(products) || _.find(products, _.isNil)) {
+                                    return reject(msg.not_found("Products"));
+                                }
+                                _.forEach(products, (product, $index) => {
+                                    if (product.stock <= 0 || product.stock < body.products[$index].qty){
+                                        return reject(msg.format("Not enough items"));
+                                    }
+                                })
+                                Promise.all([
+                                    Purchase.create(body),
+                                    Customer.findByIdAndUpdate(customerId, {purchaseMade: customer.purchaseMade+1})
+                                ])
+                                    .then(() => {
+                                        Promise.all(
+                                            Array.from(products, (product, $index) => Product.findByIdAndUpdate(product._id, {sold: product.sold + body.products[$index].qty}))
+                                        )
+                                            .then(() => resolve(msg.ok()))
+                                            .catch(err => reject(msg.internal_error(err)));
+                                    })
+                                    .catch(err => reject(msg.internal_error(err)));
+                            })
                             .catch(err => reject(msg.internal_error(err)));
                     })
                     .catch(err => reject(msg.internal_error(err)));
@@ -111,8 +121,6 @@ exports.getPurchases = function(customerId,pageSize,keyPage, startDate, endDate)
     return new Promise(function(resolve, reject) {
         validate.async({
             companyId: companyId,
-            pageSize: pageSize,
-            keyPage: keyPage,
             startDate: startDate,
             endDate: endDate
         }, constraints.getPurchases, {format: "flat"})

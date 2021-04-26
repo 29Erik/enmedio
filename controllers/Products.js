@@ -3,7 +3,7 @@
 var utils = require('../utils/writer.js');
 var Products = require('../service/ProductsService');
 
-module.exports.createProduct = function createProduct (req, res, next, companyId, body) {
+module.exports.createProduct = function createProduct (req, res, next, body, companyId) {
   Products.createProduct(companyId, body)
     .then(function (response) {
       utils.writeJson(res, response);
@@ -24,7 +24,7 @@ module.exports.deleteProduct = function deleteProduct (req, res, next, productId
 };
 
 module.exports.getProduct = function getProduct (req, res, next, productId) {
-  Products.getProduct(productId, name, price, stock, deleted)
+  Products.getProduct(productId)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -33,7 +33,7 @@ module.exports.getProduct = function getProduct (req, res, next, productId) {
     });
 };
 
-module.exports.getProducts = function getProducts (req, res, next, companyId, pageSize, keyPage, name, price, stock, deleted) {
+module.exports.getProducts = function getProducts (req, res, next, pageSize, keyPage, name, price, stock, deleted, companyId) {
   Products.getProducts(companyId, pageSize, keyPage, name, price, stock, deleted)
     .then(function (response) {
       utils.writeJson(res, response);
@@ -43,7 +43,7 @@ module.exports.getProducts = function getProducts (req, res, next, companyId, pa
     });
 };
 
-module.exports.getInventoryProducts = function getInventoryProducts (req, res, next, companyId, pageSize, keyPage) {
+module.exports.getInventoryProducts = function getInventoryProducts (req, res, next, pageSize, keyPage, companyId) {
     Products.getInventoryProducts(companyId, pageSize, keyPage)
         .then(function (response) {
             utils.writeJson(res, response);
@@ -53,7 +53,7 @@ module.exports.getInventoryProducts = function getInventoryProducts (req, res, n
         });
 };
 
-module.exports.scoreProduct = function scoreProduct (req, res, next, productId, body) {
+module.exports.scoreProduct = function scoreProduct (req, res, next, body, productId) {
     Products.scoreProduct(productId, body)
         .then(function (response) {
             utils.writeJson(res, response);

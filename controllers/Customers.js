@@ -3,7 +3,7 @@
 var utils = require('../utils/writer.js');
 var Customers = require('../service/CustomersService');
 
-module.exports.createCustomer = function createCustomer (req, res, next, companyId, body) {
+module.exports.createCustomer = function createCustomer (req, res, next, body, companyId) {
   Customers.createCustomer(companyId, body)
     .then(function (response) {
       utils.writeJson(res, response);
@@ -24,7 +24,7 @@ module.exports.deleteCustomer = function deleteCustomer (req, res, next, custome
 };
 
 module.exports.getCustomer = function getCustomer (req, res, next, customerId) {
-  Customers.getCustomer(customerId, name, email, deleted)
+  Customers.getCustomer(customerId)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -33,7 +33,7 @@ module.exports.getCustomer = function getCustomer (req, res, next, customerId) {
     });
 };
 
-module.exports.getCustomers = function getCustomers (req, res, next, companyId, pageSize, keyPage, top, name, email, deleted) {
+module.exports.getCustomers = function getCustomers (req, res, next, pageSize, keyPage, top, name, email, deleted, companyId) {
   Customers.getCustomers(companyId, pageSize, keyPage, top, name, email, deleted)
     .then(function (response) {
       utils.writeJson(res, response);

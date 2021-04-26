@@ -3,18 +3,16 @@ info:
   title: Swagger Technical test for "Enmedio"
   description: "This is a sample server for automatize process for x Company by his\
     \ products, customers, and KPI."
-  termsOfService: http://swagger.io/terms/
+  termsOfService: https://swagger.io/terms/
   contact:
     email: inge.eromero@gmail.com
   license:
     name: Apache 2.0
-    url: http://www.apache.org/licenses/LICENSE-2.0.html
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
   version: 1.0.0
 externalDocs:
   description: Find out more about Swagger
-  url: http://swagger.io
-servers:
-- url: https://enmedio.swagger.io/v1
+  url: https://swagger.io
 tags:
 - name: Company
   description: Everything related to the creation of `Company` in the platform
@@ -145,7 +143,7 @@ paths:
       requestBody:
         description: Updated `Company` object
         content:
-          '*/*':
+          application/json:
             schema:
               $ref: '#/components/schemas/CompanyRequest'
         required: true
@@ -315,7 +313,7 @@ paths:
       requestBody:
         description: Updated `Customer` object
         content:
-          '*/*':
+          application/json:
             schema:
               $ref: '#/components/schemas/CustomerRequest'
         required: true
@@ -384,7 +382,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/ProductInventoryResponse'
                 x-content-type: application/json
-      x-swagger-router-controller: Product
+      x-swagger-router-controller: Products
   /company/{companyId}/products:
     get:
       tags:
@@ -461,7 +459,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/ProductResponse'
                 x-content-type: application/json
-      x-swagger-router-controller: Product
+      x-swagger-router-controller: Products
     post:
       tags:
         - Products
@@ -484,7 +482,7 @@ paths:
       responses:
         "201":
           description: Successful response.
-      x-swagger-router-controller: Product
+      x-swagger-router-controller: Products
   /products/{productId}:
     get:
       tags:
@@ -511,7 +509,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/ProductResponse'
                 x-content-type: application/json
-      x-swagger-router-controller: Product
+      x-swagger-router-controller: Products
     put:
       tags:
       - Products
@@ -530,14 +528,14 @@ paths:
       requestBody:
         description: Updated `Product` object
         content:
-          '*/*':
+          application/json:
             schema:
               $ref: '#/components/schemas/ProductRequest'
         required: true
       responses:
         "202":
           description: Successful response.
-      x-swagger-router-controller: Product
+      x-swagger-router-controller: Products
     delete:
       tags:
       - Products
@@ -554,7 +552,7 @@ paths:
       responses:
         "201":
           description: Successful response.
-      x-swagger-router-controller: Product
+      x-swagger-router-controller: Products
     patch:
       tags:
       - Products
@@ -573,14 +571,14 @@ paths:
       requestBody:
         description: Updated `Product` object
         content:
-          '*/*':
+          application/json:
             schema:
               $ref: '#/components/schemas/ProductScore'
         required: true
       responses:
         "202":
           description: Successful response.
-      x-swagger-router-controller: Product
+      x-swagger-router-controller: Products
   /customers/{customerId}/purchase:
     get:
       tags:
@@ -618,17 +616,19 @@ paths:
         - name: startDate
           in: query
           description: The Start Date Range of `Purchase`
-          style: simple
+          style: form
           explode: false
           schema:
             type: integer
+            format: int64
         - name: endDate
           in: query
           description: The Start Date Range of `Purchase`
-          style: simple
+          style: form
           explode: false
           schema:
             type: integer
+            format: int64
       responses:
         "200":
           description: Successful response - returns an array of `Products` entities.
@@ -708,7 +708,7 @@ paths:
       requestBody:
         description: Updated `Product` object
         content:
-          '*/*':
+          application/json:
             schema:
               $ref: '#/components/schemas/PurchaseRequest'
         required: true

@@ -3,7 +3,7 @@
 var utils = require('../utils/writer.js');
 var Purchase = require('../service/PurchaseService');
 
-module.exports.createPurchase = function createPurchase (req, res, next, customerId, body) {
+module.exports.createPurchase = function createPurchase (req, res, next, body, customerId) {
     Purchase.createPurchase(customerId, body)
         .then(function (response) {
             utils.writeJson(res, response);

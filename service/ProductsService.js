@@ -23,7 +23,7 @@ exports.createProduct = function(companyId, body) {
   return new Promise(function(resolve, reject) {
     validate.async(body, constraints.createProduct, {format: "flat"})
         .then(() => {
-            Company.find({
+            Company.findOne({
                 _id: MongooseExtras.Types.ObjectId(companyId),
                 deleted: false
             }).lean()
@@ -114,7 +114,7 @@ exports.getProducts = function(companyId, pageSize, keyPage, name, price, stock,
         deleted: deleted
     }, constraints.getProducts, {format: "flat"})
         .then(() => {
-            Company.find({
+            Company.findOne({
                 _id: MongooseExtras.Types.ObjectId(companyId),
                 deleted: false
             }).lean()
@@ -122,8 +122,6 @@ exports.getProducts = function(companyId, pageSize, keyPage, name, price, stock,
                     if (_.isNil(company)) return reject(msg.not_found("Company"));
                     let query = {
                         companyId: companyId,
-                        pageSize: pageSize,
-                        keyPage: keyPage,
                         name: name,
                         price: price,
                         stock: stock,
@@ -156,16 +154,14 @@ exports.getInventoryProducts = function(companyId, pageSize, keyPage) {
             keyPage: keyPage
         }, constraints.getProducts, {format: "flat"})
             .then(() => {
-                Company.find({
+                Company.findOne({
                     _id: MongooseExtras.Types.ObjectId(companyId),
                     deleted: false
                 }).lean()
                     .then(company => {
                         if (_.isNil(company)) return reject(msg.not_found("Company"));
                         let query = {
-                            companyId: companyId,
-                            pageSize: pageSize,
-                            keyPage: keyPage
+                            companyId: companyId
                         }
                         Product.find(_.omitBy(query, _.isNil)).limit(pageSize).skip(pageSize * (keyPage - 1)).lean()
                             .then(resp => {
@@ -244,10 +240,16 @@ exports.scoreProduct = function(productId, body) {
                         if (!_.isNil(customerScore)) {
                             _.set(_.find(product.score, {customerId: customer._id}), 'score', body.score);
                         } else {
-                            product.score.push(body);
+                            if (_.isNil(product.score)) {
+                                let arr = [];
+                                arr.push(body);
+                                product.score = arr;
+                            } else {
+                                product.score.push(body);
+                            }
                         }
                         product.averageScore = 0;
-                        _.forEach(product.score, score => product.averageScore += score);
+                        _.forEach(product.score, score => product.averageScore += score.score);
                         product.averageScore = product.averageScore / product.score.length;
                         Product.findByIdAndUpdate(product._id, product)
                             .then(() => resolve(msg.ok()))

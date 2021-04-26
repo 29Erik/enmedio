@@ -25,13 +25,13 @@ exports.createCustomer = function(companyId, body) {
             body.createdOn = Date.now();
             body.deleted = false;
             body.purchaseMade = 0;
-            Company.find({
+            Company.findOne({
                 _id: MongooseExtras.Types.ObjectId(companyId),
                 deleted: false
             }).lean()
                 .then(company => {
                     if (_.isNil(company)) return reject(msg.not_found("Company"));
-                    Customer.create()
+                    Customer.create(body)
                         .then(() => resolve(msg.ok()))
                         .catch(err => reject(msg.internal_error(err)));
                 })
@@ -109,7 +109,7 @@ exports.getCustomers = function(companyId, pageSize, keyPage, top, name, email, 
         deleted: deleted
     }, constraints.getCustomers, {format: "flat"})
         .then(() => {
-            Company.find({
+            Company.findOne({
                 _id: MongooseExtras.Types.ObjectId(companyId),
                 deleted: false
             }).lean()
@@ -117,8 +117,6 @@ exports.getCustomers = function(companyId, pageSize, keyPage, top, name, email, 
                     if (_.isNil(company)) return reject(msg.not_found("Company"));
                     let query = {
                         companyId: companyId,
-                        pageSize: pageSize,
-                        keyPage: keyPage,
                         name: name,
                         email: email,
                         deleted: deleted
