@@ -25,7 +25,7 @@ exports.getArrayManipulation = function(A0,A1,A2,B0,B1,B2,K0,K1,K2) {
                 array = changeRangeArray(array, A1, B1, K1);
                 array = changeRangeArray(array, A2, B2, K2);
                 let max = _.max(array);
-                resolve(max);
+                resolve({value: max});
             })
             .catch(error => reject(msg.format(error[0])));
     });
@@ -33,8 +33,8 @@ exports.getArrayManipulation = function(A0,A1,A2,B0,B1,B2,K0,K1,K2) {
 
 function changeRangeArray(array, minIndex, maxIndex, value) {
     _.forEach(array, (item, $index) => {
-        if ($index >= minIndex || $index <= maxIndex) {
-            item[$index] += value;
+        if ($index >= minIndex && $index <= maxIndex) {
+            array[$index] += value;
         }
     });
     return array;
