@@ -23,6 +23,9 @@ Para lograr correr el proyecto se debe
 npm start
 ```
 
+O también se puede acceder a la aplicación desplegada
+[Enmedio](https://enmediotest.herokuapp.com/docs/#/)
+
 Para lograr ver el Swagger de manera local
 
 ```bash
